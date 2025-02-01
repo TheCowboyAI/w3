@@ -1,6 +1,7 @@
 { pkgs }:
 with pkgs; [
   # wayland projects
+  pkg-config
   expat
   fontconfig
   freetype
