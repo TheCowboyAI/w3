@@ -1,6 +1,6 @@
 ## **Introduction to Building a CIM with NixOS**
 
-This guide introduces a template for creating a **Composable Information Machine (CIM)** using [NixOS](https://nixos.org). CIM is designed for developers who want to build systems based on **Domain-Driven Design (DDD)** and **Event Sourcing**. If these paradigms are not part of your goals, this structure may not be suitable for you.
+This guide introduces a template for creating a **Composable Information Machine (CIM)** using [NixOS](https://nixos.org). CIM is designed for developers who want to build systems based on **Domain-Driven Design (DDD)** and **Event Driven Architecture**. If these paradigms are not part of your goals, this structure may not be suitable for you.
 
 NONE of this belongs in Nix or NixOS proper.
 We DO want it all to be a specific group of modules, based on NixOS, used in a special way to achieve something specific: A CIM.
@@ -10,14 +10,14 @@ Awesome, let's edit some code...
 Hold on pardner... This is about Abstraction.
 
 We have 3 levels of Application Development State:
-dev:
+- dev:
+  - ***WE ARE CURRENTLY HERE***
   - project branch is experimental and not tested for production release
   - CI/CD pipeline is incomplete
-  - WE ARE CURRENTLY HERE
   - internal distribution for comments
   - `dev` git branch (or personal branch, feature branch, etc.)
   - `alpha` - pre 1.0 untested
-test:
+- test:
   - in testing
   - tests are written, but not finished or passing
   - CI/CD pipeline are functioning
@@ -25,12 +25,23 @@ test:
   - actively tested by the end customer
   - `test` git branch
   - `beta` - pre 1.0 in testing
-prod:
+- prod:
   - tests pass in the CI/CD pipeline
   - approval for wide distribution
   - actively used by the end customer
   - `main` git branch
   - `release > 1.0`
+
+# Semantic Versioning
+Semantic Versioning (SemVer) is a standardized system for assigning version numbers to software releases, making it easier to communicate the nature of changes between versions. It uses the format MAJOR.MINOR.PATCH, where:
+
+    MAJOR: Incremented for incompatible or breaking changes.
+    MINOR: Incremented for backward-compatible new features.
+    PATCH: Incremented for backward-compatible bug fixes or minor updates
+
+```bash
+git tag MAJOR.MINOR.PATCH
+```
 
 These flow states may sound familiar.
 
@@ -84,22 +95,28 @@ CIM is an architectural approach that reimagines how distributed systems are bui
 We use the definitions as described by Eric Evans.
 [What is Domain Driven Design?](https://www.youtube.com/watch?v=pMuiVlnGqjk)
 
-- **Event Sourcing:** A pattern that records all changes in the system as a series of immutable events, providing a complete history of state changes[8].
+- **Event Driven Architecture:** A pattern where systems communicate and respond to events in real time or near real time. It emphasizes decoupling between components by using asynchronous event messages.
+
+- **Event Sourcing**
+A pattern that records all changes in the system as a series of immutable events, providing a complete history of state changes[8].
+
+We use both, but not *everything* is event sourced.
+
 We use the definitions as described by [Greg Young](https://github.com/gregoryyoung).
 [What is Event Sourcing?](https://youtu.be/8JKjvY4etTY?si=Mqy47CZrH8QACK3U)
 Additionally, we heavily use the [CQRS](https://www.youtube.com/watch?v=LDW0QWie21s) pattern as described by Greg Young.
 
 - **Modular Construction**
 At its core, CIM leverages NixOS's unique capabilities to create deterministic, reproducible, and modular systems. 
-[Flake Schemas](https://youtu.be/ChaJY0V4ElM?si=JhDplvBRxeWNqWom)
+[Scaling Flakes](https://youtu.be/ChaJY0V4ElM?si=JhDplvBRxeWNqWom)
 
 Our CIM approach introduces a structured way to use just **Nix Flakes** - organizing everything around the concept of *domains*.
 
 We will talk about things like how to manage applications we build, applications we use, and applications we serve.
 
-There are many other ways to do this, and unless you really want to work with Domains and Event Sourcing, those may be more appropriate for your needs.
+There are many other ways to do this, and unless you really want to work with Domains and an Event Driven Architecture, those may be more appropriate for your needs.
 
-From instatiation, we are using DDD and Eventsourcing.
+From instatiation, we are using DDD and Events.
 
 [Structuring with Nix](./doc/structuring-nix.md)
 
@@ -117,7 +134,6 @@ A *domain* represents a specific area of concern or functionality in your system
 - Both work with Organizations, People, Inventory and Events.
 
 # Discovery
-
 By injecting domains into the Nix ecosystem, we can relate all aspects of configuration and infrastructure directly to the domain they belong to. This creates a clean separation between:
 - The **Nix Domain:** The foundational tools and abstractions provided by Nix. i.e. nixosConfiguration
 - Your **Application Domain:** The specific logic and configurations you define for your system. i.e. Website
@@ -129,7 +145,7 @@ This separation ensures clarity and modularity while enabling seamless interacti
 
 Deciding what goes where is something we want to determine, and not tell our programmers (including ourselves) to go look it up at [nixos.org]
 
-Nix doesn't really care how you write a flake.nix other than "put them in inputs and outputs"
+Nix doesn't really care how you write a flake.nix other than "put them in inputs and outputs and outputs aren't typed"
 
 How you `slice and dice` a flake is totally up to you.
 
@@ -174,10 +190,10 @@ flake
   - configurations
   - ci/cd
 
-Flakes now hold everything, in modules.
+Flakes now hold everything.
 
 So is a flake a module or do I put modules in a flake?
-Yes.
+>Yes.
 
 Flakes are recursive ways of looking at a git repo.
 

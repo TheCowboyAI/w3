@@ -1,26 +1,20 @@
 {
-  description = "My CIM flake";
+  description = "Flake utils demo";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
-  };
+  inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs =
-    inputs@{ nixpkgs
-    , flake-parts
-    , ...
-    }:
-    flake-parts.lib.mkFlake
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system}; in
       {
-        inherit inputs;
+        packages = rec {
+          hello = pkgs.hello;
+          default = hello;
+        };
+        apps = rec {
+          hello = flake-utils.lib.mkApp { drv = self.packages.${system}.hello; };
+          default = hello;
+        };
       }
-      {
-        systems = [ "x86_64-linux" ];
-
-        imports = [
-          ./modules
-        ];
-      };
+    );
 }
