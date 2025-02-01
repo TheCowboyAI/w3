@@ -1,20 +1,39 @@
 {
-  description = "Flake utils demo";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
-      {
-        packages = rec {
-          hello = pkgs.hello;
-          default = hello;
+      let
+        pkgs = import nixpkgs { inherit system; };
+        pkg = nixpkgs.lib.importTOML ./Cargo.toml;
+        dependencies = import ./buildInputs.wayland.nix;
+        buildRustPackage = import ./modules/buildPackage.nix;
+      in
+      rec {
+        packages = {
+          ${pkg.package.name} =
+            buildRustPackage {
+              inherit pkgs pkg;
+              src = ./.;
+              inherit (dependencies) buildInputs;
+            };
         };
+
+        defaultPackage = packages.${pkg.package.name};
+
         apps = rec {
-          hello = flake-utils.lib.mkApp { drv = self.packages.${system}.hello; };
-          default = hello;
+          cim = flake-utils.lib.mkApp { drv = self.packages.${system}.cim; };
+          default = cim;
         };
       }
     );
 }
+
+
+
+
+
+
