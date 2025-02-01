@@ -3,39 +3,37 @@ default:
 
 # Run 'cargo run' on the project
 run *ARGS:
-    cargo run {{ARGS}}
+    nix run {{ARGS}}
 
 watch *ARGS:
 	bacon watch -- -- {{ ARGS }}
 
 start: 
-    bacon run
+    nix run
 
 build:
-    nix build .#cim
+    nix build
 
-buildimage:
-    nix build .#cimImage
-
-bin:
+run-bin:
   result/bin/cim
 
-load:
+docker-build-image:
+
+docker-load:
   docker load < result
 
-loadnew:
-  # just build
-  just buildimage
-  just load
-  just tag-latest
-
-tag-latest:
+docker-tag-latest:
   docker tag cim:latest thecowboyai/cim-start:latest
 
-push:
+docker-load-new:
+  just docker-build-image
+  just docker-load
+  just docker-tag-latest
+
+docker-push:
   docker push thecowboyai/cim-start:latest
 
-drun:
+docker-run:
   docker run --rm \
   -it \
   -e XDG_RUNTIME_DIR=/run/user/1000 \
@@ -47,6 +45,7 @@ drun:
   thecowboyai/cim-start:latest 
 
 make-nixos:
+  sudo nixos-container stop cim
   sudo nixos-container destroy cim
   sudo nixos-container create cim --config-file ./modules/nixos-container.nix
 
