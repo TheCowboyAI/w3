@@ -5,6 +5,38 @@ This guide introduces a template for creating a **Composable Information Machine
 NONE of this belongs in Nix or NixOS proper.
 We DO want it all to be a specific group of modules, based on NixOS, used in a special way to achieve something specific: A CIM.
 
+***Top Down.***
+Most Nix instructional material wiil start telling you how to convert your SYSTEM to Nix and modularizing everything about your system configuration...
+
+Hmm...
+
+No wonder everyone is confused...
+Here is a space ship, just drive it to the grocery.
+
+When building "systems", we really want to start from a single package and add capabilities modularly.
+
+***Bottom Up.***
+I don't want to start from a machine configuration. I need to start with a single package. How do I get that package to build. How does it run. What are all the dependencies and where do I put them.
+- Ok, great, my package builds.
+- Now how do I run it?
+- How can I add configuration settings.
+- How do I Test it?
+- How do I deploy it?
+
+When we can answer these questions about a single package, then you can start to think about how to assemble thousands of packages into a "system" and guarantee they all work as expected.
+
+ANY Posix "system" means:
+I have a kernel
+I have a known Posix File System
+I have a shell
+I have standard utilities
+
+It doesn't say I have to have any particular functionality.
+
+We want a minimal environment with which to operate this "package" in isolation.
+
+In other words. I am building a "system" around a package, not trying to force a package to work in a "system".
+
 Awesome, let's edit some code...
 
 Hold on pardner... This is about Abstraction.
@@ -64,7 +96,7 @@ This is a `Pre-Alpha Edition`.
 
 We need to set some `ground rules` for how we build things.
 
-Expect the API here to change until we reach a stable release candidate, then it will be fairly rigid for core operations.
+Expect the API (in dev) here to change until we reach a stable release candidate, then it will follow semantic versioning.
 
 Every version can be `pinned` or `locked` in Nix and we will take advantage of that.
 
@@ -89,7 +121,7 @@ CIM *uses* and is *fed by* other "applications", but every new "CIM" is a new se
 Many CIMs are orchestrated to communicate with each other to compose bigger information machines or to scale effectively.
 
 ### **What is CIM?**
-CIM is an architectural approach that reimagines how distributed systems are built. It emphasizes:
+CIM is an architectural approach (hint... NOT a framework) that reimagines how distributed systems are built. It emphasizes:
 
 - **Domain-Driven Design (DDD):** A methodology that aligns software design with the core business domain by modeling its concepts explicitly[2].
 We use the definitions as described by Eric Evans.
@@ -104,11 +136,11 @@ We use both, but not *everything* is event sourced.
 
 We use the definitions as described by [Greg Young](https://github.com/gregoryyoung).
 [What is Event Sourcing?](https://youtu.be/8JKjvY4etTY?si=Mqy47CZrH8QACK3U)
-Additionally, we heavily use the [CQRS](https://www.youtube.com/watch?v=LDW0QWie21s) pattern as described by Greg Young.
+Additionally, we heavily use the [CQRS](https://www.youtube.com/watch?v=LDW0QWie21s) pattern also as described by Greg Young.
 
 - **Modular Construction**
 At its core, CIM leverages NixOS's unique capabilities to create deterministic, reproducible, and modular systems. 
-[Scaling Flakes](https://youtu.be/ChaJY0V4ElM?si=JhDplvBRxeWNqWom)
+[Flakes](https://www.tweag.io/blog/2020-05-25-flakes/)
 
 Our CIM approach introduces a structured way to use just **Nix Flakes** - organizing everything around the concept of *domains*.
 
@@ -164,8 +196,6 @@ We aren't taking your freedom away, we want to make it much easier to *choose* y
 In the context of CIM:
 1. The **flake.nix** file becomes the root of a system hierarchy.
 2. Domains are explicitly defined and partitioned, rather than being in one giant file, or scattered across arbitrary semi-structured files, they are `modularized`.
-
-We further use [flake-parts](./doc/parts.nix) to enhance our modular approach. you should be familiar with [https://flake.parts/best-practices-for-module-writing]
 
 We have an opinionated way we interpret Nix and NixOS into Domains. This opinion closely follows the work of "Domain Experts" and we document that where appropriate.
 

@@ -10,23 +10,20 @@
         #sets
         pkgs = import nixpkgs { inherit system; };
         pkg = nixpkgs.lib.importTOML ./Cargo.toml;
-        sharedEnv = {
-          WAYLAND_DISPLAY = "wayland-1";
-          XDG_RUNTIME_DIR = "/run/user/1000";
-          LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}";
-        };
+        sharedEnv = import ./modules/env.nix { inherit pkgs buildInputs; };
         #lists
         buildInputs = import ./modules/buildInputs.wayland.nix { inherit pkgs; };
         shellpackages = import ./modules/packages.nix { inherit pkgs; };
         #functions
         builder = import ./modules/buildPackage.nix;
+        devshell = import ./modules/devshell.nix { inherit pkgs buildInputs; packages = shellpackages; env = sharedEnv; };
+        src = ./.;
       in
       rec {
         packages = {
           ${pkg.package.name} =
             builder {
-              inherit pkgs pkg buildInputs;
-              src = ./.;
+              inherit pkgs pkg buildInputs src;
             };
         };
 
@@ -39,7 +36,14 @@
           env = sharedEnv;
         };
 
-        devShells.default = import ./modules/devshell.nix { inherit pkgs buildInputs; packages = shellpackages; env = sharedEnv; };
+        devShells.default = devshell;
+
+        templates = {
+          cim = {
+            path = ./.;
+            description = "Template for a cim";
+          };
+        };
       }
     );
 }
