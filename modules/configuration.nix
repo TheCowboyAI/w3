@@ -1,11 +1,15 @@
 { pkgs, ... }:
+let
+  generateShellHook = attrs: builtins.concatStringsSep "\n" (map (key: "export ${key}='${attrs.${key}}'") (builtins.attrNames attrs));
+  buildInputs = import ./lists/buildInputs.wayland.nix { inherit pkgs; };
+  packages = import ./lists/packages.nix { inherit pkgs; };
+  env = import ./sets/env.nix { inherit pkgs buildInputs; };
+in
 {
-  # Enable container mode
-  boot.isContainer = true;
 
   # Configure Nix with flakes enabled
   nix = {
-    package = pkgs.nixVersions.stable;
+    package = pkgs.nixVersions.latest;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -13,16 +17,7 @@
     '';
   };
 
-  # Add basic utilities to the container
-  environment.systemPackages = with pkgs; [
-    nix
-    nixVersions.stable
-    git
-    curl
-    bash
-    coreutils
-    cacert
-  ];
+  environment.systemPackages = buildInputs ++ packages;
 
   # Configure shell environment for Nix
   programs.bash = {
@@ -30,8 +25,11 @@
     shellInit = ''
       export NIX_PATH=nixpkgs=${pkgs.path}
       export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+      ${generateShellHook env}
     '';
   };
+
+  fileSystems."/src".label = "source";
 
   # Minimal networking configuration
   networking.firewall.enable = false;

@@ -47,7 +47,7 @@ docker-run:
 make-nixos:
   sudo nixos-container stop cim
   sudo nixos-container destroy cim
-  sudo nixos-container create cim --config-file ./modules/nixos-container.nix
+  sudo nixos-container create cim --config-file ./modules/configuration.nix
 
 run-nixos:
   sudo nixos-container start cim

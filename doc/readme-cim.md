@@ -6,11 +6,11 @@ A CIM is an "information machine" built from multiple interconnected components.
 
 The goal is to create a "machine" that can be configured from the ground up, deployed wherever it's needed, and designed to self-partition, scale seamlessly, and recover autonomously.
 
-For this, we use Event Sourcing... Every component here is designed to use Event Sourcing, CQRS and Projections.
+For this, we use Event Driven Architecture (EDA)... Every component here is designed to emit Events, use CQRS, and Projections.
 
 In today’s world, we no longer build standalone servers—we build distributed systems. These systems are dynamic, adaptable, and designed to function as a unified network.
 
-Event Sourcing and focusing on Domain Events allows us to do this in a practical, deterministic way.
+Event Driven Architecture and focusing on Messagesand the Language used in the message patterns allows us to do this in a practical, deterministic way.
 
 # Communication Implies Language  
 If we are responsible for communication, we are inherently responsible for language. While no two people speak the exact same language, humans rely on shared symbols, gestures, and sounds—a kind of *charades*—to exchange understanding.  
