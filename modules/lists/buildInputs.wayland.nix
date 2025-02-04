@@ -15,4 +15,11 @@ with pkgs; [
   libxkbcommon
   vulkan-loader
   wayland
+
+  # others
+  rustc
+  cargo
+  qemu
+  python3
+  curl
 ]
