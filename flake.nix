@@ -12,66 +12,35 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      pkgName = pkg.package.name;
+      src = ./.;
       pkg = nixpkgs.lib.importTOML ./Cargo.toml;
       sharedEnv = import ./modules/sets/env.nix { inherit pkgs buildInputs; };
       buildInputs = import ./modules/lists/buildInputs.wayland.nix { inherit pkgs; };
       shellpackages = import ./modules/lists/packages.nix { inherit pkgs; };
-      src = ./.;
-
-      builder = import ./modules/buildPackage.nix;
+      configurationModule = import ./modules/configuration.nix;
       devshell = import ./modules/devshell.nix { inherit pkgs buildInputs; packages = shellpackages; env = sharedEnv; };
-      configuration = import ./modules/configuration.nix { inherit pkgs; };
-
-      # Load tests from separate files
-      rustPackageBuildTest = import ./tests/rustPackageBuildTest.nix { inherit pkgs system self pkg; };
-      containerTest = import ./tests/containerTest.nix { inherit pkgs system self; };
-      vmTest = import ./tests/vmTest.nix { inherit pkgs system self; };
+      buildPkg = import ./modules/buildPackage.nix { inherit pkgs pkg buildInputs src; };
+      generateContainer = import ./modules/generateContainer.nix { inherit system nixos-generators nixpkgs; module = configurationModule; };
+      generateVM = import ./modules/generateContainer.nix { inherit system nixpkgs; module = configurationModule; };
+      testBuild = import ./tests/test-build.nix { inherit pkgs system self pkg; };
     in
     {
       packages.${system} = {
-        ${pkg.package.name} =
-          builder { inherit pkgs pkg buildInputs src; };
-
-        default = self.packages.${system}.${pkg.package.name};
-
-        cimVM = nixos-generators.nixosGenerate {
-          inherit system;
-          modules = [
-            {
-              nix.registry.nixpkgs.flake = nixpkgs;
-            }
-            configuration
-          ];
-
-          format = "vm";
-        };
+        ${pkgName} = buildPkg;
+        default = self.packages.${system}.${pkgName};
+        cimVM = generateVM;
       };
-
-      nixosConfigurations.container =
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            configuration
-            {
-              boot.isContainer = true;
-            }
-          ];
-        };
-
       apps.${system} = {
-        ${pkg.package.name} = flake-utils.lib.mkApp {
-          drv = self.packages.${system}.${pkg.package.name};
+        ${pkgName} = flake-utils.lib.mkApp {
+          drv = self.packages.${system}.${pkgName};
         };
-        default = self.apps.${system}.${pkg.package.name};
+        default = self.apps.${system}.${pkgName};
       };
-
       devShells.${system}.default = devshell;
-
-      # Add checks for testing
+      nixosConfigurations.container = generateContainer;
       checks.${system} = {
-        rustPackageBuildTest = rustPackageBuildTest;
-        containerTest = containerTest;
-        vmTest = vmTest;
+        testBuild = testBuild;
       };
     };
 }
