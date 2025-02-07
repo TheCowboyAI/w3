@@ -1,20 +1,18 @@
 mod echo;
 
-use iced::widget::{
-    self, button, center, column, row, scrollable, text, text_input,
-};
+use iced::widget::{self, button, center, column, row, scrollable, text, text_input};
 use iced::{color, Center, Element, Fill, Subscription, Task};
 use std::sync::LazyLock;
- 
- pub const TITLE: &str = "Cowboy AI - CIM";
- 
- pub fn main() -> iced::Result {
-    iced::application(TITLE, WebSocket::update, WebSocket::view)
-        .subscription(WebSocket::subscription)
-        .run_with(WebSocket::new)
+
+pub const TITLE: &str = "Cowboy AI - CIM";
+
+pub fn main() -> iced::Result {
+    iced::application(TITLE, Cim::update, Cim::view)
+        .subscription(Cim::subscription)
+        .run_with(Cim::new)
 }
 
-struct WebSocket {
+struct Cim {
     messages: Vec<echo::Message>,
     new_message: String,
     state: State,
@@ -28,7 +26,7 @@ enum Message {
     Server,
 }
 
-impl WebSocket {
+impl Cim {
     fn new() -> (Self, Task<Message>) {
         (
             Self {
@@ -78,10 +76,7 @@ impl WebSocket {
                 echo::Event::MessageReceived(message) => {
                     self.messages.push(message);
 
-                    scrollable::snap_to(
-                        MESSAGE_LOG.clone(),
-                        scrollable::RelativeOffset::END,
-                    )
+                    scrollable::snap_to(MESSAGE_LOG.clone(), scrollable::RelativeOffset::END)
                 }
             },
             Message::Server => Task::none(),
@@ -94,19 +89,12 @@ impl WebSocket {
 
     fn view(&self) -> Element<Message> {
         let message_log: Element<_> = if self.messages.is_empty() {
-            center(
-                text("Your messages will appear here...")
-                    .color(color!(0x888888)),
-            )
-            .into()
+            center(text("Your messages will appear here...").color(color!(0x888888))).into()
         } else {
-            scrollable(
-                column(self.messages.iter().map(text).map(Element::from))
-                    .spacing(10),
-            )
-            .id(MESSAGE_LOG.clone())
-            .height(Fill)
-            .into()
+            scrollable(column(self.messages.iter().map(text).map(Element::from)).spacing(10))
+                .id(MESSAGE_LOG.clone())
+                .height(Fill)
+                .into()
         };
 
         let new_message_input = {
@@ -114,8 +102,7 @@ impl WebSocket {
                 .on_input(Message::NewMessageChanged)
                 .padding(10);
 
-            let mut button = button(text("Send").height(40).align_y(Center))
-                .padding([0, 20]);
+            let mut button = button(text("Send").height(40).align_y(Center)).padding([0, 20]);
 
             if matches!(self.state, State::Connected(_)) {
                 if let Some(message) = echo::Message::new(&self.new_message) {
@@ -140,5 +127,4 @@ enum State {
     Connected(echo::Connection),
 }
 
-static MESSAGE_LOG: LazyLock<scrollable::Id> =
-    LazyLock::new(scrollable::Id::unique);
+static MESSAGE_LOG: LazyLock<scrollable::Id> = LazyLock::new(scrollable::Id::unique);
