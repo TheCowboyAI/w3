@@ -128,13 +128,3 @@ enum State {
 }
 
 static MESSAGE_LOG: LazyLock<scrollable::Id> = LazyLock::new(scrollable::Id::unique);
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_addition() {
-        assert_eq!(2 + 2, 4);
-    }
-}
