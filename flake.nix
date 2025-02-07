@@ -6,10 +6,14 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, nixpkgs, flake-utils, nixos-generators, rust-overlay, ... }:
+  outputs = { self, nixpkgs, flake-utils, nixos-generators, microvm, rust-overlay, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -26,14 +30,15 @@
       devshell = import ./modules/devshell.nix { inherit pkgs buildInputs; packages = shellpackages; env = sharedEnv; };
       buildPkg = import ./modules/buildPackage.nix { inherit pkgs pkg buildInputs src; env = sharedEnv; };
       generateContainer = import ./modules/generateContainer.nix { inherit system nixos-generators nixpkgs; module = configurationModule; };
-      generateVM = import ./modules/generateContainer.nix { inherit system nixpkgs; module = configurationModule; };
+      generateVM = import ./modules/generateVM.nix { inherit system pkgs nixpkgs microvm; module = configurationModule; };
       testBuild = import ./tests/test-build.nix { inherit pkgs system self pkg; };
     in
     {
       packages.${system} = {
         ${pkgName} = buildPkg;
         default = self.packages.${system}.${pkgName};
-        cimVM = generateVM;
+        cimVM = self.nixosConfigurations."${pkgName}-microvm".config.microvm.declaredRunner;
+
       };
       apps.${system} = {
         ${pkgName} = flake-utils.lib.mkApp {
@@ -42,7 +47,10 @@
         default = self.apps.${system}.${pkgName};
       };
       devShells.${system}.default = devshell;
-      nixosConfigurations.container = generateContainer;
+      nixosConfigurations = {
+        container = generateContainer;
+        "${pkgName}-microvm" = generateVM;
+      };
 
       checks.${system} = {
         testBuild = testBuild;

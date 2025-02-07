@@ -17,38 +17,18 @@ build:
 run-bin:
   result/bin/cim
 
-docker-build-image:
+vm-build:
+  nixos-rebuild build-vm --flake .#cim-microvm
 
-docker-load:
-  docker load < result
+vm-run:
+  ./result/bin/run-cim-microvm-vm
 
-docker-tag-latest:
-  docker tag cim:latest thecowboyai/cim-start:latest
-
-docker-load-new:
-  just docker-build-image
-  just docker-load
-  just docker-tag-latest
-
-docker-push:
-  docker push thecowboyai/cim-start:latest
-
-docker-run:
-  docker run --rm \
-  -it \
-  -e XDG_RUNTIME_DIR=/run/user/1000 \
-  -e WAYLAND_DISPLAY=wayland-1 \
-  -e QT_QPA_PLATFORM=wayland \
-  -e GDK_BACKEND=wayland \
-  -v $(pwd)/src:/src \
-  -v /run/user/1000/wayland-1:/run/user/1000/wayland-1 \
-  thecowboyai/cim-start:latest 
-
-make-nixos:
-  sudo nixos-container stop cim
-  sudo nixos-container destroy cim
+cn-make:
   sudo nixos-container create cim --config-file ./modules/configuration.nix
-
-run-nixos:
+cn-stop:
+  sudo nixos-container stop cim
+cn-destroy:
+  sudo nixos-container destroy cim
+cn-run:
   sudo nixos-container start cim
   sudo nixos-container root-login cim
