@@ -1,4 +1,7 @@
 { pkgs }:
+let
+  rustToolchain = pkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ../../rust-toolchain.toml;
+in
 with pkgs; [
   # wayland projects
   pkg-config
@@ -7,7 +10,6 @@ with pkgs; [
   freetype
   freetype.dev
   libGL
-  pkg-config
   xorg.libX11
   xorg.libXcursor
   xorg.libXi
@@ -16,10 +18,13 @@ with pkgs; [
   vulkan-loader
   wayland
 
-  # others
-  rustc
-  cargo
+  # others cim needs
   qemu
+  rustToolchain
+  openssl.out
+  openssl.dev
+  openssl
+  gnupg
   python3
   curl
 ]

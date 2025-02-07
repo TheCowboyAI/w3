@@ -1,3 +1,0 @@
-# A Domain in Nix is just another package.
-We can access it as a derivation...
-It's an attribute set.

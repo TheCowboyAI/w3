@@ -5,9 +5,11 @@ use iced::widget::{
 };
 use iced::{color, Center, Element, Fill, Subscription, Task};
 use std::sync::LazyLock;
-
-pub fn main() -> iced::Result {
-    iced::application("WebSocket - Iced", WebSocket::update, WebSocket::view)
+ 
+ pub const TITLE: &str = "Cowboy AI - CIM";
+ 
+ pub fn main() -> iced::Result {
+    iced::application(TITLE, WebSocket::update, WebSocket::view)
         .subscription(WebSocket::subscription)
         .run_with(WebSocket::new)
 }

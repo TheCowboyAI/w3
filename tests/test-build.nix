@@ -6,5 +6,5 @@ let
 in
 pkgs.runCommand "test-rust-package" { } ''
   ${generateShellHook sharedEnv}
-   ${self.packages.${system}.${pkg.package.name}}/bin/${pkg.package.name} --version > /dev/null
+  cargo test --manifest-path ${./Cargo.tonl} --all-features
 ''

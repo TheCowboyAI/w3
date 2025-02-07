@@ -13,6 +13,10 @@ with pkgs; [
 
   # Rust
   bacon
+  openssl.dev
+  openssl.out
+  openssl
+  gnupg
 
   # cargo
   cargo

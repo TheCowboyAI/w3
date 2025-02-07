@@ -12,3 +12,6 @@ warp = "0.3"
 async-tungstenite = { version = "0.28.2", features = [
   "tokio-rustls-webpki-roots",
 ] }
+llm = { version = "1.0.7", features = ["ollama", "openai", "api"] }
+async-nats = "0.38.0"
+openssl = "0.10.70"
