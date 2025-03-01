@@ -1,5 +1,9 @@
 { pkgs, buildInputs, ... }: {
+  WLR_BACKENDS = "headless";
+  WLR_RENDERER = "pixman";
+  WLR_NO_HARDWARE_CURSORS = "1";
   WAYLAND_DISPLAY = "wayland-1";
+  XDG_SESSION_TYPE = "wayland";
   XDG_RUNTIME_DIR = "/run/user/1000";
   LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}";
   OPENSSL_DIR = "${pkgs.openssl}";

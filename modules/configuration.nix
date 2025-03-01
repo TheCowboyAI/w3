@@ -1,12 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, packages, buildInputs, ... }:
 let
-  generateShellHook = attrs: builtins.concatStringsSep "\n" (map (key: "export ${key}='${attrs.${key}}'") (builtins.attrNames attrs));
-  buildInputs = import ./lists/buildInputs.wayland.nix { inherit pkgs; };
-  packages = import ./lists/packages.nix { inherit pkgs; };
-  env = import ./sets/env.nix { inherit pkgs buildInputs; };
+  shellInit = ''
+    touch .zshrc
+    export NIX_PATH=nixpkgs=${pkgs.path}
+    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 in
 {
-
   # Configure Nix with flakes enabled
   nix = {
     package = pkgs.nixVersions.latest;
@@ -19,17 +19,25 @@ in
 
   environment.systemPackages = buildInputs ++ packages;
 
+  systemd.tmpfiles.rules = [
+    "d /run/user/1000/wayland-1 0777 cim users"
+    "d /src 0777 cim users"
+  ];
+
   # Configure shell environment for Nix
-  programs.bash = {
-    completion.enable = true;
-    shellInit = ''
-      export NIX_PATH=nixpkgs=${pkgs.path}
-      export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-      ${generateShellHook env}
-    '';
+  security.sudo = {
+    enable = true;
+    wheelNeedsPassword = false;
   };
 
-  fileSystems."/src".label = "source";
+  programs.zsh = {
+    inherit shellInit;
+    enable = true;
+
+  };
+  programs.bash = {
+    inherit shellInit;
+  };
 
   # Minimal networking configuration
   networking.firewall.enable = false;

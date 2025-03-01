@@ -4,12 +4,20 @@ with pkgs; [
   nix
   bash
   zsh
+  starship
+  helix
+  xdg-utils
+  socat
 
   # Nix        
   nix-index
   nixpkgs-fmt
   nixd
   alejandra
+  direnv
+
+  # debugger is a MODULE, don't add that here.
+  # it adds about 10 minutes to the build.
 
   # Rust
   bacon
@@ -34,4 +42,14 @@ with pkgs; [
   wasm-tools
   wasm-pack
   alsa-lib
+  mesa
+  libdrm
+
+  wayland
+  wl-clipboard
+  spice-vdagent
+  wayland-proxy-virtwl
+  waypipe
+  sway
+  kitty
 ]

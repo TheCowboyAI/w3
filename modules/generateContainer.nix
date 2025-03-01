@@ -1,8 +1,13 @@
-{ system, module, nixpkgs, ... }:
-nixpkgs.lib.nixosSystem {
-  inherit system;
-  modules = [
-    module
-    { boot.isContainer = true; }
+{ system, nixpkgs, pkgs, modules, env, src, ... }:
+nixpkgs.lib.nixosSystem
+{
+  inherit system pkgs;
+
+  modules = modules ++ [
+    {
+      boot.isContainer = true;
+      environment.sessionVariables = env;
+
+    }
   ];
 }

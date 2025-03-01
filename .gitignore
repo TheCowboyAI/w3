@@ -3,3 +3,4 @@
 /result-lib
 .direnv
 *.qcow2
+.tmp

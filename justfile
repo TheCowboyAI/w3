@@ -17,18 +17,13 @@ build:
 run-bin:
   result/bin/cim
 
-vm-build:
-  nixos-rebuild build-vm --flake .#cim-microvm
-
-vm-run:
-  ./result/bin/run-cim-microvm-vm
-
 cn-make:
-  sudo nixos-container create cim --config-file ./modules/configuration.nix
+  sudo nixos-container create cimc --flake .#cimc
+cn-start:
+  sudo nixos-container start cimc
 cn-stop:
-  sudo nixos-container stop cim
+  sudo nixos-container stop cimc
 cn-destroy:
-  sudo nixos-container destroy cim
+  sudo nixos-container destroy cimc
 cn-run:
-  sudo nixos-container start cim
-  sudo nixos-container root-login cim
+  sudo nixos-container login cimc

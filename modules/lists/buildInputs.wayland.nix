@@ -1,7 +1,4 @@
 { pkgs }:
-let
-  rustToolchain = pkgs.pkgsBuildHost.rust-bin.fromRustupToolchainFile ../../rust-toolchain.toml;
-in
 with pkgs; [
   # wayland projects
   pkg-config
@@ -20,7 +17,6 @@ with pkgs; [
 
   # others cim needs
   qemu
-  rustToolchain
   openssl.out
   openssl.dev
   openssl
