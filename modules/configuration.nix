@@ -7,6 +7,9 @@ let
   '';
 in
 {
+  boot.isContainer = true;
+  boot.loader.grub.enable = false;
+
   # Configure Nix with flakes enabled
   nix = {
     package = pkgs.nixVersions.latest;
