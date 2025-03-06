@@ -1,130 +1,104 @@
-mod echo;
+use iced::{Application, Element, Settings, Subscription};
+use iced::widget::{Button, Column, Text};
+use async_nats::*;
 
-use iced::widget::{self, button, center, column, row, scrollable, text, text_input};
-use iced::{color, Center, Element, Fill, Subscription, Task};
-use std::sync::LazyLock;
-
-pub const TITLE: &str = "Cowboy AI - CIM";
-
-pub fn main() -> iced::Result {
-    iced::application(TITLE, Cim::update, Cim::view)
-        .subscription(Cim::subscription)
-        .run_with(Cim::new)
-}
-
-struct Cim {
-    messages: Vec<echo::Message>,
-    new_message: String,
-    state: State,
-}
+const NATS_HOST: String = "nats://localhost:4222".to_string();
 
 #[derive(Debug, Clone)]
 enum Message {
-    NewMessageChanged(String),
-    Send(echo::Message),
-    Echo(echo::Event),
-    Server,
+    ContextEvent(String),
+    ButtonClicked,
 }
 
-impl Cim {
-    fn new() -> (Self, Task<Message>) {
+enum Cim {
+    Initializing,
+    Mapping,
+    Ready,
+    Degraded,
+    Stopped
+}
+
+struct Porter {
+    connection: Connection,
+    last_event: Option,
+}
+
+impl Application for Porter {
+    type Executor = iced::executor::Default;
+    type Message = Message;
+    type Flags = ();
+
+    fn new(_flags: ()) -> (Porter, Command) {
+        let conn = async_nats::connect(NATS_HOST).ok();
+
         (
-            Self {
-                messages: Vec::new(),
-                new_message: String::new(),
-                state: State::Disconnected,
+            Cim {
+                nats_conn: conn,
+                last_event: None,
             },
-            Task::batch([
-                Task::perform(echo::server::run(), |_| Message::Server),
-                widget::focus_next(),
-            ]),
+            Command::none(),
         )
     }
 
-    fn update(&mut self, message: Message) -> Task<Message> {
+    fn title(&self) -> String {
+        String::from("Iced + NATS Event Hierarchy")
+    }
+
+    fn update(&mut self, message: Message) -> Command {
         match message {
-            Message::NewMessageChanged(new_message) => {
-                self.new_message = new_message;
-
-                Task::none()
+            Message::ButtonClicked => {
+                if let Some(conn) = &self.nats_conn {
+                    conn.publish("context.ui.button.clicked", "Button clicked").unwrap();
+                }
+                Command::none()
             }
-            Message::Send(message) => match &mut self.state {
-                State::Connected(connection) => {
-                    self.new_message.clear();
-
-                    connection.send(message);
-
-                    Task::none()
-                }
-                State::Disconnected => Task::none(),
-            },
-            Message::Echo(event) => match event {
-                echo::Event::Connected(connection) => {
-                    self.state = State::Connected(connection);
-
-                    self.messages.push(echo::Message::connected());
-
-                    Task::none()
-                }
-                echo::Event::Disconnected => {
-                    self.state = State::Disconnected;
-
-                    self.messages.push(echo::Message::disconnected());
-
-                    Task::none()
-                }
-                echo::Event::MessageReceived(message) => {
-                    self.messages.push(message);
-
-                    scrollable::snap_to(MESSAGE_LOG.clone(), scrollable::RelativeOffset::END)
-                }
-            },
-            Message::Server => Task::none(),
+            Message::ContextEvent(payload) => {
+                self.last_event = Some(payload);
+                Command::none()
+            }
         }
     }
 
-    fn subscription(&self) -> Subscription<Message> {
-        Subscription::run(echo::connect).map(Message::Echo)
+    fn subscription(&self) -> Subscription {
+        // Subscribe to context-level updates
+        iced::Subscription::from_recipe(NatsSubscription {
+            subject: "context.ui.notifications".to_string(),
+        })
     }
 
-    fn view(&self) -> Element<Message> {
-        let message_log: Element<_> = if self.messages.is_empty() {
-            center(text("Your messages will appear here...").color(color!(0x888888))).into()
-        } else {
-            scrollable(column(self.messages.iter().map(text).map(Element::from)).spacing(10))
-                .id(MESSAGE_LOG.clone())
-                .height(Fill)
-                .into()
-        };
-
-        let new_message_input = {
-            let mut input = text_input("Type a message...", &self.new_message)
-                .on_input(Message::NewMessageChanged)
-                .padding(10);
-
-            let mut button = button(text("Send").height(40).align_y(Center)).padding([0, 20]);
-
-            if matches!(self.state, State::Connected(_)) {
-                if let Some(message) = echo::Message::new(&self.new_message) {
-                    input = input.on_submit(Message::Send(message.clone()));
-                    button = button.on_press(Message::Send(message));
-                }
-            }
-
-            row![input, button].spacing(10).align_y(Center)
-        };
-
-        column![message_log, new_message_input]
-            .height(Fill)
-            .padding(20)
-            .spacing(10)
-            .into()
+    fn view(&self) -> Element {
+        let content = Column::new()
+            .push(Button::new(Text::new("Click Me")).on_press(Message::ButtonClicked))
+            .push(Text::new(
+                self.last_event
+                    .as_deref()
+                    .unwrap_or("No notifications yet"),
+            ));
+        
+        content.into()
     }
 }
 
-enum State {
-    Disconnected,
-    Connected(echo::Connection),
+struct NatsSubscription {
+    subject: String,
 }
 
-static MESSAGE_LOG: LazyLock<scrollable::Id> = LazyLock::new(scrollable::Id::unique);
+impl iced_native::subscription::Recipe for NatsSubscription
+where
+    H: std::hash::Hasher,
+{
+    type Output = Message;
+
+    fn hash(&self, state: &mut H) {
+        self.subject.hash(state);
+    }
+
+    fn stream(self: Box, _input: I) -> futures::stream::BoxStream {
+        // Implement subscription logic here
+        futures::stream::empty().boxed()
+    }
+}
+
+fn main() {
+    MyApp::run(Settings::default());
+}

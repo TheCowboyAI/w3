@@ -1,19 +1,17 @@
 {
+  description = "";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay.url = "github:oxalica/rust-overlay";
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, rust-overlay, nixos-generators, ... }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
-        inherit system nixos-generators;
+        inherit system;
         overlays = [ (import rust-overlay) ];
       };
       src = ./.;
@@ -27,6 +25,7 @@
       users = import ./modules/users.nix { inherit pkgs; };
       configurationModule = import ./modules/configuration.nix { inherit pkgs buildInputs; packages = shellpackages; };
       buildPkg = import ./modules/buildPackage.nix { inherit pkgs pkg buildInputs src env; };
+      nats = import ./modules/nats.nix;
     in
     {
       packages.${system} = {
@@ -46,12 +45,10 @@
         inherit system;
         modules = [
           configurationModule
+          nats
           users
           {
-            boot.isContainer = true;
-            environment.systemPackages = [
-              self.packages.${system}.${pkgName}
-            ];
+            environment.systemPackages = [ self.packages.${system}.${pkgName} ];
             nixpkgs.overlays = [ (import rust-overlay) ];
           }
         ];
