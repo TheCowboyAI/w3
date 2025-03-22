@@ -6,7 +6,15 @@ edition = "2021"
 publish = false
 
 [dependencies]
-iced = { version = "0.13", features = ["debug", "tokio"] }
-tokio = { version = "1.42.0", features = ["time"] }
-async-nats = "0.39.0"
-openssl = "0.10.71"
+iced.workspace = true
+iced.features = ["debug", "tokio"]
+
+warp = "0.3"
+
+[dependencies.async-tungstenite]
+version = "0.25"
+features = ["tokio-rustls-webpki-roots"]
+
+[dependencies.tokio]
+workspace = true
+features = ["time"]
