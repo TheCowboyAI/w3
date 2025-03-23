@@ -1,4 +1,9 @@
-{ pkgs, packages, buildInputs, ... }:
+{
+  pkgs,
+  packages,
+  buildInputs,
+  ...
+}:
 let
   shellInit = ''
     touch .zshrc
@@ -19,6 +24,26 @@ in
 
   environment.systemPackages = buildInputs ++ packages;
 
+  # Font configuration
+  fonts = {
+    fontDir.enable = true;
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      dejavu_fonts
+      noto-fonts
+      noto-fonts-emoji
+      liberation_ttf
+    ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [ "DejaVu Sans Mono" ];
+        sansSerif = [ "DejaVu Sans" ];
+        serif = [ "DejaVu Serif" ];
+      };
+    };
+  };
+
   systemd.tmpfiles.rules = [
     "d /run/user/1000/wayland-1 0777 cim users"
     "d /src 0777 cim users"
@@ -33,7 +58,6 @@ in
   programs.zsh = {
     inherit shellInit;
     enable = true;
-
   };
   programs.bash = {
     inherit shellInit;

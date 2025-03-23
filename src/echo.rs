@@ -1,7 +1,7 @@
 pub mod server;
 
 use iced::futures;
-use iced::task::{Never, Sipper, sipper};
+use iced::subscription::{self, Subscription};
 use iced::widget::text;
 
 use futures::channel::mpsc;
@@ -11,55 +11,59 @@ use futures::stream::StreamExt;
 use async_tungstenite::tungstenite;
 use std::fmt;
 
-pub fn connect() -> impl Sipper<Never, Event> {
-    sipper(async |mut output| {
-        loop {
-            const ECHO_SERVER: &str = "ws://127.0.0.1:3030";
+pub fn connect() -> Subscription<Event> {
+    struct Connect;
 
-            let (mut websocket, mut input) =
-                match async_tungstenite::tokio::connect_async(ECHO_SERVER).await
-                {
-                    Ok((websocket, _)) => {
-                        let (sender, receiver) = mpsc::channel(100);
-
-                        output.send(Event::Connected(Connection(sender))).await;
-
-                        (websocket.fuse(), receiver)
-                    }
-                    Err(_) => {
-                        tokio::time::sleep(tokio::time::Duration::from_secs(1))
-                            .await;
-
-                        output.send(Event::Disconnected).await;
-                        continue;
-                    }
-                };
-
+    subscription::channel(
+        std::any::TypeId::of::<Connect>(),
+        100,
+        |mut output| async move {
             loop {
-                futures::select! {
-                    received = websocket.select_next_some() => {
-                        match received {
-                            Ok(tungstenite::Message::Text(message)) => {
-                                output.send(Event::MessageReceived(Message::User(message))).await;
-                            }
-                            Err(_) => {
-                                output.send(Event::Disconnected).await;
-                                break;
-                            }
-                            Ok(_) => {},
-                        }
-                    }
-                    message = input.select_next_some() => {
-                        let result = websocket.send(tungstenite::Message::Text(message.to_string())).await;
+                const ECHO_SERVER: &str = "ws://127.0.0.1:3030";
 
-                        if result.is_err() {
+                let (mut websocket, mut input) =
+                    match async_tungstenite::tokio::connect_async(ECHO_SERVER).await {
+                        Ok((websocket, _)) => {
+                            let (sender, receiver) = mpsc::channel(100);
+
+                            output.send(Event::Connected(Connection(sender))).await;
+
+                            (websocket.fuse(), receiver)
+                        }
+                        Err(_) => {
+                            tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+
                             output.send(Event::Disconnected).await;
+                            continue;
+                        }
+                    };
+
+                loop {
+                    futures::select! {
+                        received = websocket.select_next_some() => {
+                            match received {
+                                Ok(tungstenite::Message::Text(message)) => {
+                                    output.send(Event::MessageReceived(Message::User(message))).await;
+                                }
+                                Err(_) => {
+                                    output.send(Event::Disconnected).await;
+                                    break;
+                                }
+                                Ok(_) => {},
+                            }
+                        }
+                        message = input.select_next_some() => {
+                            let result = websocket.send(tungstenite::Message::Text(message.to_string())).await;
+
+                            if result.is_err() {
+                                output.send(Event::Disconnected).await;
+                            }
                         }
                     }
                 }
             }
-        }
-    })
+        },
+    )
 }
 
 #[derive(Debug, Clone)]
@@ -119,8 +123,8 @@ impl fmt::Display for Message {
     }
 }
 
-impl<'a> text::IntoFragment<'a> for &'a Message {
-    fn into_fragment(self) -> text::Fragment<'a> {
-        text::Fragment::Borrowed(self.as_str())
+impl<'a> From<&'a Message> for text::Text<'a> {
+    fn from(message: &'a Message) -> Self {
+        text::Text::new(message.as_str())
     }
 }

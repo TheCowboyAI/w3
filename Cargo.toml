@@ -5,10 +5,20 @@ authors = ["Steele Price <steele@thecowboy.ai>"]
 edition = "2021"
 publish = false
 
-[dependencies]
-iced.workspace = true
-iced.features = ["debug", "tokio"]
+# Add profile settings for faster compilation
+[profile.dev]
+incremental = true
+debug = 1          # Reduce debug symbol generation
+opt-level = 0      # No optimization for faster builds
+lto = false        # Disable link-time optimization in dev
 
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+
+[dependencies]
+iced = { version = "0.12", features = ["debug", "tokio"] }
 warp = "0.3"
 
 [dependencies.async-tungstenite]
@@ -16,5 +26,7 @@ version = "0.25"
 features = ["tokio-rustls-webpki-roots"]
 
 [dependencies.tokio]
-workspace = true
-features = ["time"]
+version = "1.35"
+features = [
+    "full",
+] # Including full since you'll likely need more features for an Iced app

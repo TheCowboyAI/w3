@@ -1,6 +1,17 @@
-{ pkgs, pkg, buildInputs, src, env }:
+{
+  pkgs,
+  pkg,
+  buildInputs,
+  src,
+  env,
+  rustVersion ? pkgs.rust-bin.stable."1.84.1".default,
+}:
 let
-  generateShellHook = attrs: builtins.concatStringsSep "\n" (map (key: "export ${key}='${attrs.${key}}'") (builtins.attrNames attrs));
+  generateShellHook =
+    attrs:
+    builtins.concatStringsSep "\n" (
+      map (key: "export ${key}='${attrs.${key}}'") (builtins.attrNames attrs)
+    );
 in
 pkgs.rustPlatform.buildRustPackage {
 
@@ -10,7 +21,8 @@ pkgs.rustPlatform.buildRustPackage {
   version = pkg.package.version;
   src = src;
   cargoLock.lockFile = "${src}/Cargo.lock";
-  buildInputs = buildInputs;
+  buildInputs = buildInputs ++ [ rustVersion ];
+  nativeBuildInputs = [ rustVersion ];
 
   cargoHash = "";
 

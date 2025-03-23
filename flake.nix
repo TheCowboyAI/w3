@@ -7,24 +7,54 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      rust-overlay,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
         overlays = [ (import rust-overlay) ];
       };
+      rustVersion = pkgs.rust-bin.stable."1.84.1".default;
       src = ./.;
       pkg = nixpkgs.lib.importTOML ./Cargo.toml;
       pkgName = pkg.package.name;
       env = import ./modules/sets/env.nix { inherit pkgs buildInputs; };
       buildInputs = import ./modules/lists/buildInputs.wayland.nix { inherit pkgs; };
       shellpackages = import ./modules/lists/packages.nix { inherit pkgs; };
-      devshell = import ./modules/devshell.nix { inherit pkgs buildInputs env; packages = shellpackages; };
-      testBuild = import ./tests/test-build.nix { inherit pkgs system self pkg; };
+      devshell = import ./modules/devshell.nix {
+        inherit pkgs buildInputs env;
+        packages = shellpackages;
+      };
+      testBuild = import ./tests/test-build.nix {
+        inherit
+          pkgs
+          system
+          self
+          pkg
+          ;
+      };
       users = import ./modules/users.nix { inherit pkgs; };
-      configurationModule = import ./modules/configuration.nix { inherit pkgs buildInputs; packages = shellpackages; };
-      buildPkg = import ./modules/buildPackage.nix { inherit pkgs pkg buildInputs src env; };
+      configurationModule = import ./modules/configuration.nix {
+        inherit pkgs buildInputs;
+        packages = shellpackages;
+      };
+      buildPkg = import ./modules/buildPackage.nix {
+        inherit
+          pkgs
+          pkg
+          buildInputs
+          src
+          env
+          rustVersion
+          ;
+      };
       nats = import ./modules/nats.nix;
     in
     {

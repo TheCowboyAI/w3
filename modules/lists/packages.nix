@@ -1,5 +1,6 @@
 { pkgs, ... }:
-with pkgs; [
+with pkgs;
+[
   just
   nix
   bash
@@ -9,7 +10,7 @@ with pkgs; [
   xdg-utils
   socat
 
-  # Nix        
+  # Nix
   nix-index
   nixpkgs-fmt
   nixd
@@ -20,6 +21,7 @@ with pkgs; [
   # it adds about 10 minutes to the build.
 
   # Rust
+  rust-bin.stable.latest.default
   bacon
   openssl.dev
   openssl.out

@@ -1,26 +1,36 @@
 { pkgs }:
-with pkgs; [
-  # wayland projects
+with pkgs;
+[
+  # Essential build dependencies
   pkg-config
+
+  # Wayland and graphics support
+  wayland
+  wayland-protocols
+  libGL
+  vulkan-loader
+  libxkbcommon # Required for keyboard input
+
+  # Font rendering
   expat
   fontconfig
   freetype
   freetype.dev
-  libGL
-  xorg.libX11
-  xorg.libXcursor
-  xorg.libXi
-  xorg.libXrandr
-  libxkbcommon
-  vulkan-loader
-  wayland
+  cairo
+  pango
+  harfbuzz
 
-  # others cim needs
-  qemu
+  # Fonts
+  dejavu_fonts
+  noto-fonts
+  noto-fonts-emoji
+  liberation_ttf
+
+  # Security and encryption
+  gnupg
   openssl.out
   openssl.dev
-  openssl
-  gnupg
-  python3
-  curl
+
+  # Rust toolchain
+  rust-bin.stable.latest.default
 ]
