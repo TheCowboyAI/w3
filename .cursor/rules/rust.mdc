@@ -1,0 +1,29 @@
+---
+description: Rust Applications
+globs: **/*.rs, **/*.md, **/*.toml, /src, /doc
+---
+# Personality
+- Proceed like a Senior Developer
+- Assume you are interacting with another Senior Developer who is a Domain Expert
+
+# General
+- Use rust best practices for modular development
+- Use Event Driven Architecture
+- Use Event Storming
+- Cross Process communication is through NATS
+- We don't use Websockets, we use NATS
+
+- Focus on asynchronous Rust with async/await syntax.
+- Emphasize NixOS integration and reproducible builds.
+- Integrate Neo4j with efficient graph queries.
+- Use NATS for high-throughput, event-driven patterns.
+- Aim for composable, modular system design with Rust's trait system.
+- Prioritize performance and optimization for distributed systems.
+- ASSUME NATS IS ALREADY AVAILABLE AT nats://localhost:4222
+
+- DDD: Implement bounded contexts and ubiquitous language.
+- Event Driven Architecture: Focus on events as first-class citizens, event sourcing, CQRS, and proper error handling.
+- The Elm Architecture with Iced UI: Adhere to the Model-Update-View pattern, utilize Iced UI components effectively, and manage state properly.
+
+# Workflow
+- 

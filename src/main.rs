@@ -1,13 +1,14 @@
-mod echo;
+pub mod nats;
 mod styles;
 
+use crate::nats::{connect, ChatMessage, Connection, Event};
+use crate::styles::*;
 use iced::widget::{self, button, column, container, row, scrollable, text, text_input};
 use iced::{alignment, Application, Command, Element, Length, Subscription, Theme};
 use std::sync::LazyLock;
-use styles::*;
 
 pub fn main() -> iced::Result {
-    WebSocket::run(iced::Settings {
+    NatsChat::run(iced::Settings {
         antialiasing: true,
         default_text_size: iced::Pixels(16.0),
         window: iced::window::Settings {
@@ -22,8 +23,8 @@ pub fn main() -> iced::Result {
     })
 }
 
-struct WebSocket {
-    messages: Vec<echo::Message>,
+struct NatsChat {
+    messages: Vec<ChatMessage>,
     new_message: String,
     state: State,
 }
@@ -31,12 +32,11 @@ struct WebSocket {
 #[derive(Debug, Clone)]
 enum Message {
     NewMessageChanged(String),
-    Send(echo::Message),
-    Echo(echo::Event),
-    Server,
+    Send(ChatMessage),
+    Nats(Event),
 }
 
-impl WebSocket {
+impl NatsChat {
     fn new() -> (Self, Command<Message>) {
         (
             Self {
@@ -44,10 +44,7 @@ impl WebSocket {
                 new_message: String::new(),
                 state: State::Disconnected,
             },
-            Command::batch([
-                Command::perform(echo::server::run(), |_| Message::Server),
-                widget::focus_next(),
-            ]),
+            widget::focus_next(),
         )
     }
 
@@ -65,28 +62,27 @@ impl WebSocket {
                 }
                 State::Disconnected => Command::none(),
             },
-            Message::Echo(event) => match event {
-                echo::Event::Connected(connection) => {
+            Message::Nats(event) => match event {
+                Event::Connected(connection) => {
                     self.state = State::Connected(connection);
-                    self.messages.push(echo::Message::connected());
+                    self.messages.push(ChatMessage::connected());
                     Command::none()
                 }
-                echo::Event::Disconnected => {
+                Event::Disconnected => {
                     self.state = State::Disconnected;
-                    self.messages.push(echo::Message::disconnected());
+                    self.messages.push(ChatMessage::disconnected());
                     Command::none()
                 }
-                echo::Event::MessageReceived(message) => {
+                Event::MessageReceived(message) => {
                     self.messages.push(message);
                     scrollable::snap_to(MESSAGE_LOG.clone(), scrollable::RelativeOffset::END)
                 }
             },
-            Message::Server => Command::none(),
         }
     }
 
     fn subscription(&self) -> Subscription<Message> {
-        echo::connect().map(Message::Echo)
+        connect().map(Message::Nats)
     }
 
     fn view(&self) -> Element<Message> {
@@ -136,7 +132,7 @@ impl WebSocket {
             .padding([0, 24]);
 
             if matches!(self.state, State::Connected(_)) {
-                if let Some(message) = echo::Message::new(&self.new_message) {
+                if let Some(message) = ChatMessage::new(&self.new_message) {
                     input = input.on_submit(Message::Send(message.clone()));
                     button = button.on_press(Message::Send(message));
                 }
@@ -160,7 +156,7 @@ impl WebSocket {
     }
 }
 
-impl Application for WebSocket {
+impl Application for NatsChat {
     type Message = Message;
     type Theme = Theme;
     type Executor = iced::executor::Default;
@@ -171,7 +167,7 @@ impl Application for WebSocket {
     }
 
     fn title(&self) -> String {
-        String::from("WebSocket - Iced")
+        String::from("NATS Chat - Iced")
     }
 
     fn update(&mut self, message: Message) -> Command<Message> {
@@ -189,7 +185,7 @@ impl Application for WebSocket {
 
 enum State {
     Disconnected,
-    Connected(echo::Connection),
+    Connected(Connection),
 }
 
 static MESSAGE_LOG: LazyLock<scrollable::Id> = LazyLock::new(scrollable::Id::unique);

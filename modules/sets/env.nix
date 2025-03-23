@@ -8,7 +8,7 @@
   XDG_SESSION_TYPE = "wayland";
   XDG_RUNTIME_DIR = "/run/user/1000";
   WINIT_UNIX_BACKEND = "wayland";
-  WAYLAND_DEBUG = "1";
+  WAYLAND_DEBUG = "0";
 
   # Library paths
   LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}";
