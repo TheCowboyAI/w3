@@ -24,6 +24,7 @@ Design the initial system architecture and core components for the Composable In
 - Define domain event flow patterns ✓
 - Define content-addressable storage approach using IPLD ✓
 - Define primary user interfaces and interaction model ✓
+- Define security architecture and authentication framework ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -46,6 +47,7 @@ Design the initial system architecture and core components for the Composable In
 - Domain event flow patterns documentation ✓
 - IPLD content-addressable storage documentation ✓
 - Primary user interfaces documentation ✓
+- Security architecture documentation ✓
 
 ## Task Details
 
@@ -143,6 +145,15 @@ Design the initial system architecture and core components for the Composable In
 - [ ] Design consistency models
 - [ ] Define fault tolerance approaches
 - [ ] Create distributed security model
+
+### Security Architecture
+- [x] Define Root Certificate Authority (CA) approach
+- [x] Establish YubiKey integration strategy
+- [x] Design key hierarchy and management
+- [x] Define certificate infrastructure
+- [x] Establish authentication framework
+- [x] Define secure communication patterns
+- [x] Design secure key management processes
 
 ### 2023-04-05: Base CIM Services Definition
 Established the core services that constitute a base CIM installation:
@@ -247,8 +258,44 @@ This approach provides a consistent experience across all platforms while optimi
 
 Documentation added as a design decision in docs/notes/012-primary-user-interfaces.md.
 
+### 2023-04-06: Security Architecture
+Established a comprehensive security architecture for the CIM system:
+
+1. **Root Certificate Authority (CA)**:
+   - Generated in an air-gapped environment for maximum security
+   - Comprises a core private key, authentication key, encryption key, and signing key
+   - Used to sign the CIM's TLS certificates and establish trust
+   - Used to initialize the NATS message store with appropriate tools (nsc)
+   - Backed by a secure key management process using YubiKeys
+
+2. **YubiKey Integration**:
+   - YubiKeys serve as secure hardware devices for storing keys and authentication
+   - Root CA's Certify Key stored in a non-exportable format on YubiKeys
+   - Support for PIV functionality, digital signing, and SSO capabilities
+   - Multiple YubiKeys configured with identical shared keys for redundancy
+
+3. **Key Hierarchy and Certificate Infrastructure**:
+   - Multi-level key hierarchy with Root CA, Intermediate CAs, Service Keys, and User Keys
+   - X.509 certificates for TLS/SSL encryption using ED25519 for optimal security
+   - Service-specific certificates and client certificates for mutual TLS
+
+4. **Authentication Framework**:
+   - Multiple authentication methods (YubiKey, certificates, traditional passwords)
+   - Role-based access control (RBAC) and principle of least privilege
+   - SSO capabilities integrated with the NATS security framework
+
+5. **Secure Communication**:
+   - TLS encryption for all NATS traffic
+   - Mutual TLS authentication for service-to-service communication
+   - Signed events in the event store with verification
+   - Encryption of sensitive data at rest
+
+This comprehensive security approach provides a robust foundation for the CIM system, addressing authentication, encryption, and access control needs. The YubiKey-based approach offers strong hardware security while maintaining usability, and the air-gapped initialization process ensures maximum security for our trust anchor.
+
+Documentation added as a design decision in docs/notes/013-security-architecture.md.
+
 ## Time Estimate
-The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, cross-domain interaction patterns, domain event flow patterns, content-addressable storage approach, and primary user interfaces are complete. We're now focused on detailed component specifications and interface definitions.
+The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, cross-domain interaction patterns, domain event flow patterns, content-addressable storage approach, primary user interfaces, and security architecture are complete. We're now focused on detailed component specifications and interface definitions.
 
 ## Dependencies
 None - This is the initial design task.

@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system, established cross-domain interaction patterns, created standardized domain event flow patterns, and implemented IPLD for content-addressable storage. We have designed the primary user interfaces across multiple platforms. We are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system, established cross-domain interaction patterns, created standardized domain event flow patterns, and implemented IPLD for content-addressable storage. We have designed the primary user interfaces across multiple platforms and established a comprehensive security architecture with YubiKey integration. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -34,6 +34,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Domain event flow patterns definition
 - [x] IPLD content-addressable storage implementation
 - [x] Primary user interfaces design and interaction model
+- [x] Security architecture with Root CA and YubiKey integration
 
 ## In Progress
 
@@ -56,6 +57,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] MCP interface definitions for core services
 - [ ] Detailed specifications for each base CIM service
 - [ ] Service-specific NATS subject patterns
+- [ ] Secure initialization procedures for system setup
 
 ## Upcoming Work
 
@@ -83,6 +85,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Base CIM service implementation
 - [ ] Third-party integration modules for each service
 - [ ] Service-specific MCP interface documentation
+- [ ] YubiKey initialization automation
+- [ ] Air-gapped environment setup for key generation
+- [ ] Certificate management system implementation
 
 ## Implementation Details
 
@@ -215,6 +220,18 @@ All interfaces follow a consistent interaction model centered around:
 
 The interfaces communicate with the backend through NATS messaging, with system requests via standardized subjects and a separate command channel for container control. This AI agent-driven approach provides a consistent, intelligent interaction experience across all platforms while optimizing for each platform's specific capabilities.
 
+For system security, we've established a comprehensive architecture with:
+
+1. **Root Certificate Authority (CA)** - Generated in an air-gapped environment and used to sign CIM's TLS certificates and initialize NATS
+2. **YubiKey Integration** - Hardware-based security for storing the Root CA's Certify Key and providing authentication
+3. **Key Hierarchy** - Multi-level hierarchy from Root CA to user keys with proper separation of concerns
+4. **Certificate Infrastructure** - X.509 certificates using ED25519 for optimal security and performance
+5. **Authentication Framework** - Multiple methods with YubiKey as primary, supporting RBAC and least privilege principles
+6. **Secure Communication** - TLS encryption for all NATS traffic with mutual TLS for service communication
+7. **Key Management Processes** - Secure procedures for air-gapped key generation and YubiKey initialization
+
+This security architecture provides a robust foundation for the CIM system, addressing authentication, encryption, and access control needs while ensuring the integrity of our communications and data.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -264,6 +281,11 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - [ ] Implementing consistent context menus across platforms
 - [ ] Developing efficient NATS communication for mobile environments
 - [ ] Balancing native capabilities with consistent cross-platform experience
+- [ ] Implementing secure YubiKey initialization in air-gapped environments
+- [ ] Managing certificate lifecycle across distributed components
+- [ ] Balancing security requirements with usability
+- [ ] Implementing proper key rotation processes
+- [ ] Ensuring secure event signing without performance degradation
 
 ## Learnings and Insights
 
@@ -329,12 +351,21 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - NATS provides a reliable communication backbone for all user interfaces
 - AI-driven interaction reduces UI complexity and improves user experience
 - Context menus balance simplicity with powerful functionality
+- Hardware-based security with YubiKeys offers strong protection for cryptographic material
+- Air-gapped key generation ensures maximum security for the Root CA
+- ED25519-based certificates provide a good balance of security and performance
+- A multi-level certificate hierarchy supports proper security practices with minimal exposure of the Root CA
+- Mutual TLS offers strong service-to-service authentication
+- NATS security features integrate well with our overall security architecture
+- RBAC provides appropriate access controls while maintaining usability
+- Event signing enables non-repudiation and audit trails
+- Multi-factor authentication enhances security without significant usability impact
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, and primary user interfaces
-- Status: High-level design, domain patterns, implementation architecture, base services definition, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, and primary user interfaces design complete; detailed design in progress
+- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, primary user interfaces, and security architecture
+- Status: High-level design, domain patterns, implementation architecture, base services definition, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, primary user interfaces design, and security architecture complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept

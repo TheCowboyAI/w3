@@ -5,7 +5,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ## Active Tasks
 
 ### [001 - Initial System Design](tasks/001-initial-system-design.md)
-- **Status**: In Progress (99.5% complete)
+- **Status**: In Progress (99.8% complete)
 - **Priority**: High
 - **Description**: Design the initial architecture of the CIM system
 - **Progress**:
@@ -24,6 +24,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Domain event flow patterns defined
   - ✓ IPLD content-addressable storage approach defined
   - ✓ Primary user interfaces and interaction model defined
+  - ✓ Security architecture and authentication framework defined
   - ⏳ Detailed component specifications
   - ⏳ Interface definitions
   - ⏳ NixOS module design
@@ -148,6 +149,29 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - Implement consistent navigation patterns
   - Develop documentation and user guides
 
+### 012 - Security Implementation
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement the security architecture with Root CA, YubiKey integration, and authentication framework
+- **Dependencies**: 001 - Initial System Design, 003 - NATS JetStream Configuration
+- **Subtasks**:
+  - Create Nix Flake for air-gapped environment setup
+  - Develop YubiKey initialization automation scripts
+  - Implement Root CA generation process
+  - Establish certificate management procedures
+  - Create YubiKey-based authentication system
+  - Implement NATS security configuration
+  - Configure TLS for all services
+  - Set up mutual TLS for service-to-service communication
+  - Implement event signing and verification
+  - Develop secure backup procedures for cryptographic material
+  - Create key rotation mechanisms
+  - Implement role-based access control system
+  - Design secure service startup procedures
+  - Document security protocols and procedures
+  - Create disaster recovery playbooks for security incidents
+  - Develop security monitoring and audit tools
+
 ## Completed Tasks
 
 *None yet*
@@ -162,6 +186,9 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - IPLD will provide content-addressed, immutable storage for objects with event linkage
 - User interfaces will follow a chat-centric interaction model with contextual information windows
 - Rust will be used across all platforms to maximize code sharing and performance
+- Security architecture will use YubiKeys for hardware-based security and authentication
+- Root CA will be generated in an air-gapped environment for maximum security
+- All communication will be secured with TLS, with mutual TLS for service-to-service communication
 
 ## Task Legend
 
