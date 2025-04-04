@@ -21,6 +21,8 @@ Design the initial system architecture and core components for the Composable In
 - Define service interfaces and MCP integration approach ✓
 - Define base CIM services and their integration patterns ✓
 - Define cross-domain interaction patterns ✓
+- Define domain event flow patterns ✓
+- Define content-addressable storage approach using IPLD ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -40,6 +42,8 @@ Design the initial system architecture and core components for the Composable In
 - Service interfaces and MCP integration documentation ✓
 - Base CIM services documentation ✓
 - Cross-domain interaction patterns documentation ✓
+- Domain event flow patterns documentation ✓
+- IPLD content-addressable storage documentation ✓
 
 ## Task Details
 
@@ -124,6 +128,7 @@ Design the initial system architecture and core components for the Composable In
 - [x] Establish object storage approach
 - [x] Determine persistence strategies
 - [x] Design multi-tier storage architecture (JetStream → Cluster → Wasabi)
+- [x] Define content-addressable storage model using IPLD
 - [ ] Design event schemas
 - [ ] Define event processing patterns
 - [ ] Create object storage access patterns
@@ -172,11 +177,56 @@ We've documented concrete examples showing these patterns in action, including p
 
 Documentation added as a design decision in docs/notes/009-cross-domain-interaction-patterns.md.
 
+### 2023-04-06: Domain Event Flow Patterns
+Established comprehensive patterns for domain event flows throughout the system:
+
+1. **Standardized Event Structure**: Defined a consistent JSON structure for all domain events, including:
+   - Core fields: id, type, source, time, version
+   - Context fields: correlationId, causationId
+   - Payload data structure
+   - Metadata for auxiliary information
+
+2. **NATS Subject Hierarchy**: Created a convention for event publication using the pattern:
+   ```
+   events.{domain}.{entity}.{eventType}[.v{version}]
+   ```
+
+3. **Event Flow Patterns**:
+   - Command → Event → Projection Pattern
+   - Saga Coordination Pattern
+   - Event Enrichment Pattern
+   - Event Archival Pattern
+
+4. **JetStream Configuration**: Defined stream configuration with domain-specific streams, retention policies, replication, and compression settings.
+
+5. **Event Evolution Strategy**: Established an approach for versioning and evolving event schemas while maintaining compatibility.
+
+These patterns ensure consistent event structure and flow across all domains, enabling reliable system-wide communication while respecting domain boundaries. They align perfectly with our NATS JetStream architecture and support our cross-domain interaction patterns.
+
+Documentation added as a design decision in docs/notes/010-domain-event-flow-patterns.md.
+
+### 2023-04-06: IPLD Content-Addressable Storage
+Established IPLD (InterPlanetary Linked Data) as the foundational data model for our Object Store:
+
+1. **Content-Addressed Storage**: All objects are identified by Content IDs (CIDs) derived from their cryptographic hash, ensuring data integrity and verification.
+
+2. **Event-Object Linkage**: Every Object Store operation has a corresponding Event Store entry that references the object's CID, creating a complete audit trail.
+
+3. **Immutability Enforcement**: Objects are treated as immutable - once stored with a CID, the content cannot change. Updates are implemented as new objects with new CIDs, with version relationships tracked through events.
+
+4. **Merkle-DAG Structure**: Objects can reference other objects via their CIDs, creating a directed acyclic graph that enables complex data structures as compositions of smaller objects.
+
+5. **Multi-tier Implementation**: Objects and their CIDs remain consistent as they flow through our multi-tier storage architecture (NATS JetStream → 3-Node Cluster → Wasabi).
+
+This approach provides strong guarantees for data integrity, enables natural deduplication, creates a comprehensive audit trail, and aligns with modern distributed systems principles. The content-addressed nature of IPLD also simplifies many aspects of distributed storage, as objects can be referenced consistently regardless of their physical location.
+
+Documentation added as a design decision in docs/notes/011-ipld-content-addressable-storage.md.
+
 ## Time Estimate
-The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, and cross-domain interaction patterns are complete. We're now focused on detailed component specifications, interface definitions, and NixOS module design.
+The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, cross-domain interaction patterns, domain event flow patterns, and content-addressable storage approach are complete. We're now focused on detailed component specifications and interface definitions.
 
 ## Dependencies
 None - This is the initial design task.
 
 ## Notes
-This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, distributed strategy, base CIM services, and cross-domain interaction patterns are now defined, but detailed component specifications, interface definitions, and NixOS module design need further development. 
+This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. Most of the high-level architectural decisions are now complete, but detailed component specifications and interface definitions still need development. 

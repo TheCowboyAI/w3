@@ -15,6 +15,8 @@ This directory contains documented design decisions for the CIM project. Each de
 | [007](007-service-interfaces-and-mcp-integration.md) | Service Interfaces and MCP Integration | 2023-04-05 | Defines the dual-interface approach with NATS for primary communication and MCP for AI integration |
 | [008](008-base-cim-services.md) | Base CIM Services | 2023-04-05 | Establishes the core services that constitute a base CIM installation and their integration patterns |
 | [009](009-cross-domain-interaction-patterns.md) | Cross-Domain Interaction Patterns | 2023-04-06 | Defines the patterns for communication and data sharing between domains while maintaining domain boundaries |
+| [010](010-domain-event-flow-patterns.md) | Domain Event Flow Patterns | 2023-04-06 | Establishes standardized event structures, flows, and versioning strategies for domain events across the system |
+| [011](011-ipld-content-addressable-storage.md) | IPLD Content-Addressable Storage | 2023-04-06 | Defines the implementation of IPLD for content-addressed, immutable object storage with event-object linkage |
 
 ## Decision Relationships
 
@@ -60,6 +62,24 @@ This directory contains documented design decisions for the CIM project. Each de
                                                                               │                        │
                                                                               │ 009: Cross-Domain      │
                                                                               │ Interaction Patterns   │
+                                                                              │                        │
+                                                                              └────────────┬───────────┘
+                                                                                           │
+                                                                                           │
+                                                                                           ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 010: Domain Event      │
+                                                                              │ Flow Patterns          │
+                                                                              │                        │
+                                                                              └────────────┬───────────┘
+                                                                                           │
+                                                                                           │
+                                                                                           ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 011: IPLD Content-     │
+                                                                              │ Addressable Storage    │
                                                                               │                        │
                                                                               └────────────────────────┘
 ```

@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system and established cross-domain interaction patterns. We are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system, established cross-domain interaction patterns, created standardized domain event flow patterns, and implemented IPLD for content-addressable storage. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -31,6 +31,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Service interfaces and MCP integration approach
 - [x] Base CIM services definition and integration patterns
 - [x] Cross-domain interaction patterns definition
+- [x] Domain event flow patterns definition
+- [x] IPLD content-addressable storage implementation
 
 ## In Progress
 
@@ -41,9 +43,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Domain pattern implementation guidelines
 - [ ] NixOS module structure design
 - [ ] Container communication patterns
-- [ ] Event schema design
-- [ ] Object storage structure design
-- [ ] Event sourcing patterns
+- [ ] Detailed event schema implementations
+- [ ] Detailed object storage structure
+- [ ] Event sourcing implementation details
 - [ ] Common domain object definitions
 - [ ] Vertical market domain object definitions
 - [ ] Domain boundary definitions
@@ -175,6 +177,30 @@ For cross-domain interactions, we've established comprehensive patterns that mai
 
 These patterns maintain domain integrity while enabling complex business processes that span multiple domains. They rely on our NATS JetStream architecture with standardized event structures and subject naming conventions.
 
+For domain event flows, we've defined standardized patterns to ensure consistency and reliability:
+
+1. **Standardized Event Structure** - JSON structure with core fields, context fields, payload, and metadata
+2. **NATS Subject Hierarchy** - Convention `events.{domain}.{entity}.{eventType}[.v{version}]`
+3. **Event Flow Patterns**:
+   - Command → Event → Projection Pattern
+   - Saga Coordination Pattern
+   - Event Enrichment Pattern
+   - Event Archival Pattern
+4. **Event Storage in JetStream** - Domain-specific streams with retention, replication, and compression
+5. **Event Evolution Strategy** - Versioning and compatibility approach for schema evolution
+
+These event flow patterns provide the foundation for reliable, traceable, and consistent event-driven communication throughout the system, supporting both individual domain operations and cross-domain processes.
+
+For our Object Store, we've implemented IPLD (InterPlanetary Linked Data) as the foundational data model:
+
+1. **Content-Addressed Storage** - Objects are identified by Content IDs (CIDs) derived from their cryptographic hash
+2. **Event-Object Linkage** - Every Object Store operation has a corresponding Event Store entry
+3. **Immutability Enforcement** - Objects are immutable once stored; updates create new objects with new CIDs
+4. **Merkle-DAG Structure** - Objects can reference other objects via CIDs, creating composable data structures
+5. **Multi-tier Storage** - Objects flow through our storage tiers while maintaining consistent CIDs
+
+This IPLD implementation provides strong data integrity guarantees, built-in verification, natural deduplication, and a comprehensive audit trail. It aligns our storage architecture with modern distributed systems principles and enables efficient handling of complex data structures.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -214,6 +240,10 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - [ ] Managing service dependencies and startup sequence
 - [ ] Ensuring consistent user experience across multiple service UIs
 - [ ] Balancing containerization overhead with resource efficiency
+- [ ] Managing IPLD CID generation and verification performance
+- [ ] Implementing efficient IPLD libraries for our storage backends
+- [ ] Balancing immutability with storage efficiency
+- [ ] Designing effective object versioning strategies
 
 ## Learnings and Insights
 
@@ -257,12 +287,26 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Saga pattern provides a robust approach to cross-domain processes
 - Neo4j relationship registry makes cross-domain relationships explicit and traversable
 - Standardized event structures and subject naming improve system consistency
+- Correlation IDs enable tracking events across domain boundaries
+- Event versioning strategy supports system evolution without breaking changes
+- Command → Event → Projection pattern provides a clean separation of concerns
+- NATS subject hierarchy enables flexible subscription patterns
+- Event enrichment allows for progressive enhancement of events
+- Event archival balances performance with long-term data retention
+- Event-driven patterns enhance system auditability and recoverability
+- Content-addressed storage provides built-in data verification
+- IPLD CIDs enable location-independent object references
+- Immutable objects simplify caching and replication strategies
+- Merkle-DAG structures enable efficient handling of complex data relationships
+- Content-based deduplication emerges naturally from CID-based storage
+- Event-object linkage creates a comprehensive audit trail
+- IPLD aligns with modern distributed systems principles
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, and cross-domain interaction patterns
-- Status: High-level design, domain patterns, implementation architecture, base services definition, and cross-domain interaction patterns complete; detailed design in progress
+- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, cross-domain interaction patterns, domain event flow patterns, and IPLD content-addressable storage approach
+- Status: High-level design, domain patterns, implementation architecture, base services definition, cross-domain interaction patterns, domain event flow patterns, and IPLD content-addressable storage approach complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept

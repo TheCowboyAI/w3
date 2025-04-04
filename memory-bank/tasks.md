@@ -5,7 +5,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ## Active Tasks
 
 ### [001 - Initial System Design](tasks/001-initial-system-design.md)
-- **Status**: In Progress (97% complete)
+- **Status**: In Progress (99% complete)
 - **Priority**: High
 - **Description**: Design the initial architecture of the CIM system
 - **Progress**:
@@ -21,7 +21,8 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Service interfaces and MCP integration approach defined
   - ✓ Base CIM services defined (AI, NATS, Git, Mail, Search, Docs, Web, WF, Vault, Notes, Feeds, DB)
   - ✓ Cross-domain interaction patterns defined
-  - ⏳ Domain event flow documentation
+  - ✓ Domain event flow patterns defined
+  - ✓ IPLD content-addressable storage approach defined
   - ⏳ Detailed component specifications
   - ⏳ Interface definitions
   - ⏳ NixOS module design
@@ -37,7 +38,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ### 003 - NATS JetStream Configuration
 - **Status**: Planned
 - **Priority**: High
-- **Description**: Configure NATS JetStream for event sourcing and object storage
+- **Description**: Configure NATS JetStream for event sourcing and object storage with IPLD
 - **Dependencies**: 001 - Initial System Design
 
 ### 004 - NixOS Module Framework
@@ -105,6 +106,25 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - Set up development and testing environments
   - Design progressive deployment strategy
 
+### 010 - IPLD Object Store Implementation
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement the IPLD-based content-addressable Object Store with event linkage
+- **Dependencies**: 001 - Initial System Design, 003 - NATS JetStream Configuration
+- **Subtasks**:
+  - Create IPLD library integration for NATS JetStream
+  - Implement CID generation and verification
+  - Define DAG-CBOR storage format for objects
+  - Establish event-object linkage patterns
+  - Create object retrieval and verification mechanisms
+  - Implement multi-tier storage propagation
+  - Design object versioning strategy
+  - Create IPLD traversal APIs
+  - Implement Merkle-DAG operations
+  - Develop object deduplication system
+  - Build test suite for data integrity verification
+  - Create monitoring for object store metrics
+
 ## Completed Tasks
 
 *None yet*
@@ -116,6 +136,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - Common domains will be implemented first, followed by vertical market examples
 - Services will expose dual interfaces: NATS for system components and MCP for AI integration
 - Vendor-provided MCP interfaces will be preferred for third-party tools where available
+- IPLD will provide content-addressed, immutable storage for objects with event linkage
 
 ## Task Legend
 
