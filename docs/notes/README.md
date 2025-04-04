@@ -20,6 +20,7 @@ This directory contains documented design decisions for the CIM project. Each de
 | [012](012-primary-user-interfaces.md) | Primary User Interfaces | 2023-04-06 | Defines the three user interfaces (Native, Web, Mobile) and their chat-centric interaction model |
 | [013](013-security-architecture.md) | Security Architecture | 2023-04-06 | Establishes Root CA, YubiKey integration, and secure authentication framework for CIM |
 | [014](014-component-specifications.md) | Detailed Component Specifications | 2023-04-07 | Provides detailed specifications for the seven core components, including their internal structure, interfaces, and resource requirements |
+| [015](015-component-interfaces.md) | Component Interface Definitions | 2023-04-07 | Defines standardized interfaces for all core components, including event, service, and command interfaces with NATS subject patterns |
 
 ## Decision Relationships
 
@@ -110,6 +111,15 @@ This directory contains documented design decisions for the CIM project. Each de
                                                                               │                        │
                                                                               │ 014: Component         │
                                                                               │ Specifications         │
+                                                                              │                        │
+                                                                              └────────────┬───────────┘
+                                                                                           │
+                                                                                           │
+                                                                                           ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 015: Component         │
+                                                                              │ Interface Definitions  │
                                                                               │                        │
                                                                               └────────────────────────┘
 ```
