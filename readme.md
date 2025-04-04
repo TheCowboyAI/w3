@@ -4,6 +4,10 @@
 
 The Composable Information Machine (CIM) is an architectural pattern for building systems that help users organize, process, and leverage information in a composable and modular way. It enables the creation of domain-specific information workflows through a flexible, component-based architecture.
 
+## Project Dashboard
+
+📊 [View Interactive Project Dashboard](./docs/dashboard.md) - Visual overview of project progress, component status, and timelines
+
 ## Purpose
 
 The CIM pattern addresses the challenges of information overload, isolated information silos, and rigid workflows by providing a flexible framework for information management. It allows organizations to design their own information processing pipelines using modular components while adapting to specific vertical market requirements.
