@@ -2,15 +2,40 @@
 
 ## Technology Stack
 
-The CIM project is currently in the design phase. Specific technology choices will be determined as the project progresses. The following sections outline potential technology areas that may be utilized.
+The CIM project will be implemented as a hyper-converged solution using NixOS. 
+
+### Implementation Architecture
+
+- **NixOS Base System**: The system will be built as a NixOS configuration for the host.
+- **NixOS Modules**: Functionality will be added through modular NixOS modules.
+- **nixos-containers**: Core components will be deployed as isolated nixos-containers.
+- **Minimal Host**: The host will only run:
+  - Security services
+  - Container hosting tools
+  - NATS server (shared messaging system)
+- **Inventory Management**: The host is tracked as part of an inventory system.
+
+This architecture aligns with our modular component design, with each component potentially deployed as an isolated container while sharing communication infrastructure through NATS.
+
+### Component Deployment Strategy
+
+| Component | Deployment Approach |
+|-----------|---------------------|
+| Information Unit System | nixos-container |
+| Component Registry | nixos-container |
+| Pipeline Engine | nixos-container |
+| Plugin System | NixOS module + container support |
+| Storage Manager | nixos-container |
+| User Interface Framework | nixos-container |
+| Integration Hub | nixos-container |
 
 ### Potential Backend Technologies
-- Node.js/TypeScript for server-side components
+- NixOS for system configuration and deployment
+- NATS for messaging and component communication
 - Rust for performance-critical components
 - Python for data processing and analysis
 - PostgreSQL or MongoDB for data storage
 - Redis for caching and real-time features
-- Message queues for asynchronous processing
 
 ### Potential Frontend Technologies
 - React or Vue.js for user interfaces
@@ -20,30 +45,33 @@ The CIM project is currently in the design phase. Specific technology choices wi
 - Electron for desktop applications
 - Progressive Web App capabilities
 
-### Potential Infrastructure
-- Docker for containerization
-- Kubernetes for orchestration
+### Infrastructure
+- NixOS for containerization and configuration
+- Container orchestration via NixOS modules
 - CI/CD pipelines for automated testing and deployment
-- Cloud provider (AWS, Azure, GCP) for hosting
-- Serverless functions for microservices
+- Potential cloud deployment with NixOS configurations
+- NATS for internal service communication
 
 ## Development Environment
 
 ### Required Tools
+- Nix package manager
 - Git for version control
-- Node.js and npm/yarn for JavaScript development
+- NixOS for development environment
 - Code editor (VS Code recommended)
-- Docker for containerized development
+- NATS client tools for testing
 - Terminal for command-line operations
 
 ### Development Workflow
+- NixOS configuration management
 - Feature-branch workflow
 - Pull requests for code review
 - Automated testing
 - Continuous integration
+- Reproducible builds via Nix
 
 ### Local Setup
-Detailed setup instructions will be provided once technology choices are finalized.
+Development will use NixOS or nix-shell for consistent environments across team members. Detailed setup instructions will be provided in a separate document.
 
 ## Testing Strategy
 
@@ -56,11 +84,13 @@ Detailed setup instructions will be provided once technology choices are finaliz
 - Component interaction tests
 - API contract testing
 - End-to-end workflows
+- Container integration testing
 
 ### Performance Testing
 - Load testing
 - Scalability testing
 - Bottleneck identification
+- Container resource usage analysis
 
 ## Documentation Approach
 
@@ -68,11 +98,13 @@ Detailed setup instructions will be provided once technology choices are finaliz
 - Inline documentation
 - API documentation
 - Architecture documentation
+- NixOS module documentation
 
 ### User Documentation
 - User guides
 - API references
 - Tutorials and examples
+- Deployment guides
 
 ## Versioning and Compatibility
 
@@ -85,4 +117,5 @@ Detailed setup instructions will be provided once technology choices are finaliz
 ### Compatibility Commitments
 - Backward compatibility within major versions
 - Deprecation notices before removal
-- Migration guides for major upgrades 
+- Migration guides for major upgrades
+- NixOS module compatibility contracts 

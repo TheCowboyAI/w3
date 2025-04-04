@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design and domain pattern definition, and are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -17,6 +17,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Extension point identification
 - [x] Domain pattern definition
 - [x] Integration of domain patterns into system design
+- [x] Implementation architecture definition (NixOS with containers)
+- [x] Component deployment strategy
 
 ## In Progress
 
@@ -25,6 +27,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] API definition
 - [ ] Extension mechanism details
 - [ ] Domain pattern implementation guidelines
+- [ ] NixOS module structure design
+- [ ] Container communication patterns
 
 ## Upcoming Work
 
@@ -34,6 +38,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Proof-of-concept implementation
 - [ ] Domain-specific use cases
 - [ ] Pattern application examples
+- [ ] Initial NixOS configuration
+- [ ] Container resource specifications
+- [ ] NATS messaging implementation
 
 ## Implementation Details
 
@@ -61,7 +68,14 @@ Additionally, nine domain pattern categories have been defined to guide informat
 8. **Context Management Patterns**
 9. **Adaptation Patterns**
 
-For full details, see memory-bank/system_design.md and memory-bank/domainPatterns.md.
+The implementation architecture will use NixOS as a hyper-converged solution:
+- Core system built as a NixOS configuration for the host
+- Functionality added through modular NixOS modules
+- Individual components deployed as isolated nixos-containers
+- Minimal host focused on security, container hosting, and NATS messaging
+- Part of a broader inventory management system
+
+For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md.
 
 ## Known Issues and Challenges
 
@@ -72,6 +86,9 @@ For full details, see memory-bank/system_design.md and memory-bank/domainPattern
 - Designing for both ease of use and extensibility
 - Ensuring coherent integration between technical architecture and domain patterns
 - Maintaining consistency across pattern implementations
+- Defining appropriate resource boundaries for containers
+- Establishing secure communication patterns between containers
+- Designing for efficient state management across containerized components
 
 ## Learnings and Insights
 
@@ -82,21 +99,24 @@ For full details, see memory-bank/system_design.md and memory-bank/domainPattern
 - Immutable information units with modification tracking support auditability
 - Domain patterns provide important context for technical implementation decisions
 - Information classification and knowledge representation are foundational to the system design
+- NixOS containers provide a good balance of isolation and resource efficiency
+- A shared messaging system (NATS) simplifies inter-component communication
+- Declarative configuration via NixOS supports reproducible deployments
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, and domain patterns
-- Status: High-level design and domain patterns complete, detailed design in progress
+- Target: Define system architecture, core components, domain patterns, and implementation approach
+- Status: High-level design, domain patterns, and implementation architecture complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept
-- Target: Implement core functionality in a limited scope
+- Target: Implement core functionality in a limited scope with initial NixOS configuration
 - Status: Not started
 - ETA: TBD
 
 ### Milestone 3: MVP
-- Target: Develop minimum viable product with essential features
+- Target: Develop minimum viable product with essential features as containerized components
 - Status: Not started
 - ETA: TBD
 
