@@ -4,36 +4,67 @@ This document serves as a reference to all tasks, pointing to individual task fi
 
 ## Active Tasks
 
-### Design Tasks
+### [001 - Initial System Design](tasks/001-initial-system-design.md)
+- **Status**: In Progress (90% complete)
+- **Priority**: High
+- **Description**: Design the initial architecture of the CIM system
+- **Progress**:
+  - ✓ High-level architecture established
+  - ✓ Core components identified
+  - ✓ Domain patterns defined
+  - ✓ Event/object store strategy established (NATS JetStream)
+  - ✓ Multi-tier scaling architecture designed (Leaf Node → 3-Node Cluster → Wasabi)
+  - ✓ Business focus defined (medium-sized businesses in vertical markets)
+  - ✓ Domain-driven design approach established
+  - ✓ Common domain objects defined
+  - ✓ Vertical market domain examples created
+  - ⏳ Cross-domain interaction patterns
+  - ⏳ Domain event flow documentation
+  - ⏳ Detailed component specifications
+  - ⏳ Interface definitions
+  - ⏳ NixOS module design
 
-- [001-initial-system-design](tasks/001-initial-system-design.md) - Initial design of the CIM system architecture and components [IN PROGRESS]
+## Upcoming Tasks
 
-## Planned Tasks
+### 002 - Common Domain Implementation
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement the common domain objects (People, Organizations, Locations, Documents, Inventory)
+- **Dependencies**: 001 - Initial System Design
 
-### Core Implementation
+### 003 - NATS JetStream Configuration
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Configure NATS JetStream for event sourcing and object storage
+- **Dependencies**: 001 - Initial System Design
 
-- Design core component interfaces
-- Implement basic pipeline processing
-- Create plugin system architecture
-- Develop information unit model
-- Implement type system foundation
+### 004 - NixOS Module Framework
+- **Status**: Planned
+- **Priority**: Medium
+- **Description**: Create the NixOS module framework for CIM components
+- **Dependencies**: 001 - Initial System Design
 
-### User Interface
+### 005 - Healthcare Domain Example
+- **Status**: Planned
+- **Priority**: Medium
+- **Description**: Implement a vertical market example for healthcare
+- **Dependencies**: 002 - Common Domain Implementation
 
-- Design UI/UX concepts
-- Develop component visualization
-- Create pipeline builder interface
-- Implement information display system
-
-### Integration
-
-- Define external system connectors
-- Implement standard data source adapters
-- Create import/export mechanisms
+### 006 - Manufacturing Domain Example
+- **Status**: Planned
+- **Priority**: Medium
+- **Description**: Implement a vertical market example for manufacturing
+- **Dependencies**: 002 - Common Domain Implementation
 
 ## Completed Tasks
 
-No tasks have been completed yet.
+*None yet*
+
+## Notes
+
+- Domain-driven design will guide our implementation approach
+- Event sourcing using NATS JetStream will provide a foundation for the domain objects
+- Common domains will be implemented first, followed by vertical market examples
 
 ## Task Legend
 
