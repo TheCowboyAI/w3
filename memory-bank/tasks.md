@@ -24,16 +24,16 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - **Description**: Create the NixOS module framework for CIM components
 - **Dependencies**: 001 - Initial System Design
 
-### 005 - Healthcare Domain Example
-- **Status**: Planned
+### 005 - Private Lending Domain Example
+- **Status**: Not Started
+- **Description**: Implement a vertical market example for private lending
 - **Priority**: Medium
-- **Description**: Implement a vertical market example for healthcare
-- **Dependencies**: 002 - Common Domain Implementation
+- **Dependencies**: 004
 
-### 006 - Manufacturing Domain Example
+### 006 - IT Services Domain Example
 - **Status**: Planned
 - **Priority**: Medium
-- **Description**: Implement a vertical market example for manufacturing
+- **Description**: Implement a vertical market example for IT services (Managed Cloud Hosting, Hardware Services, Software Development, Infrastructure Development, Business Integration)
 - **Dependencies**: 002 - Common Domain Implementation
 
 ### 007 - Domain Graph Storage and Visualization
@@ -168,7 +168,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Base CIM services defined (AI, NATS, Git, Mail, Search, Docs, Web, WF, Vault, Notes, Feeds, DB)
   - ✓ Cross-domain interaction patterns defined
   - ✓ Domain event flow patterns defined
-  - ✓ IPLD content-addressable storage approach defined
+  - ✓ IPLD content-addressed storage approach defined
   - ✓ Primary user interfaces and interaction model defined
   - ✓ Security architecture and authentication framework defined
   - ✓ Detailed component specifications completed

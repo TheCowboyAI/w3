@@ -50,6 +50,26 @@ Vertical domain objects may extend common domain objects:
 (VerticalObject)-[:EXTENDS]->(CommonObject)
 ```
 
+For example, in the Private Lending vertical, a `Borrower` extends the common `Person` domain object:
+
+```
+(Borrower:VerticalObject)-[:EXTENDS]->(Person:CommonObject)
+```
+
+This allows specialized vertical domains to build upon common business objects while adding domain-specific attributes, events, and behaviors.
+
+## Example Vertical Markets
+
+The CIM architecture supports various vertical markets, including:
+
+- **Private Lending**: Extends common domains with lending-specific objects like LoanApplication, PropertyAsset, and PrivateLender
+- **IT Services**: Extends common domains with service-specific objects like ManagedCloudHosting, SoftwareDevelopment, and BusinessIntegration
+- **Legal**: Legal case management and document processing
+- **Education**: Student records and curriculum management
+- **Construction**: Project management and resource allocation
+
+Each vertical market implementation uses the same domain patterns while addressing industry-specific requirements.
+
 ## NATS Communication
 
 The graph viewer communicates with CIM components through NATS using these subjects:
