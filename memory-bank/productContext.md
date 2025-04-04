@@ -40,6 +40,9 @@ CIM is specifically designed for medium-sized businesses that need:
 3. **Cloud Independence**: Alternatives to increasingly expensive and dependency-creating cloud services
 4. **Data Sovereignty**: Control over their data and processing
 5. **Progressive Scaling**: Ability to start small and grow as needs evolve
+6. **Vertical Market Support**: Industry-specific functionality for their business domain
+
+Our primary focus is on businesses operating in vertical markets - specialized industry segments with unique requirements and workflows. CIM uses a domain-driven approach to address these specialized needs while providing common business functionality.
 
 Our secondary audiences include:
 
@@ -68,4 +71,7 @@ CIM offers unique value through:
 6. **Independence**: Reduce dependency on external cloud providers.
 7. **Hybrid Approach**: Critical data housed internally, cloud used only for enhancements.
 8. **Cost Effectiveness**: Lower TCO compared to pure cloud solutions.
-9. **Incremental Scaling**: Start with a single node, scale to cluster as needs grow. 
+9. **Incremental Scaling**: Start with a single node, scale to cluster as needs grow.
+10. **Domain-Driven Design**: Clear boundaries between vertical market concerns and common functionality.
+11. **Vertical Market Focus**: Specialized capabilities for industry-specific requirements.
+12. **Balanced Functionality**: Both vertical-specific and common business domains. 

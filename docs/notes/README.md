@@ -10,36 +10,37 @@ This directory contains documented design decisions for the CIM project. Each de
 | [002](002-nats-jetstream-dual-role.md) | NATS JetStream Dual Role | 2023-04-04 | Establishes NATS JetStream as both Event Store and Object Store |
 | [003](003-nixos-hyperconverged-implementation.md) | NixOS Hyper-Converged Implementation | 2023-04-04 | Details the NixOS-based deployment with containerized components |
 | [004](004-business-focus-and-audience.md) | Business Focus and Hybrid Cloud Approach | 2023-04-05 | Defines the target audience as medium-sized businesses and outlines the hybrid approach to cloud resources |
+| [005](005-domain-driven-vertical-markets.md) | Domain-Driven Design for Vertical Markets | 2023-04-05 | Describes how domain boundaries enable addressing specialized vertical market requirements while leveraging common business domains |
 
 ## Decision Relationships
 
 ```
-┌─────────────────────────┐
-│                         │
-│ 004: Business Focus &   │
-│ Hybrid Cloud Approach   │
-│                         │
-└─────────┬───────────────┘
-          │
-          │ Drives
-          │
-          ▼
-┌────────────────────────┐
-│                        │
-│ 003: NixOS             │
-│ Hyper-Converged        │◄────────┐
-│ Implementation         │         │
-│                        │         │
-└───────────┬────────────┘         │
-            │                      │
-            │                      │
-            ▼                      │
-┌────────────────────────┐         │
-│                        │         │
-│ 002: NATS JetStream    │─────────┘
-│ Dual Role              │
-│                        │◄────────┐
-└───────────┬────────────┘         │
+┌─────────────────────────┐            ┌─────────────────────────┐
+│                         │            │                         │
+│ 004: Business Focus &   │◄───────────┤ 005: Domain-Driven      │
+│ Hybrid Cloud Approach   │    Aligns  │ Design for Vertical     │
+│                         │    with    │ Markets                 │
+└─────────┬───────────────┘            └───────────┬─────────────┘
+          │                                        │
+          │ Drives                                 │ Influences
+          │                                        │
+          ▼                                        ▼
+┌────────────────────────┐                 ┌────────────────────────┐
+│                        │                 │                        │
+│ 003: NixOS             │                 │ 002: NATS JetStream    │
+│ Hyper-Converged        │◄────────┐      │ Dual Role              │
+│ Implementation         │         │      │                        │
+│                        │         │      └───────────┬────────────┘
+└───────────┬────────────┘         │                  │
+            │                      │                  │
+            │                      │                  │
+            ▼                      │                  ▼
+┌────────────────────────┐         │      ┌────────────────────────┐
+│                        │         │      │                        │
+│ 002: NATS JetStream    │─────────┘      │ 001: Multi-tier        │
+│ Dual Role              │                │ Scaling Architecture   │
+│                        │◄────────┐      │                        │
+└───────────┬────────────┘         │      └────────────────────────┘
             │                      │
             │                      │
             ▼                      │
