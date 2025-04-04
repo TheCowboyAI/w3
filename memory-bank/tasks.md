@@ -56,6 +56,21 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - **Description**: Implement a vertical market example for manufacturing
 - **Dependencies**: 002 - Common Domain Implementation
 
+### 007 - Domain Graph Storage and Visualization
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement domain object storage in Cypher format and create a graph visualization tool
+- **Dependencies**: 001 - Initial System Design
+- **Subtasks**:
+  - Create a `/domain` directory structure for Cypher files
+  - Define Cypher templates for domain objects
+  - Convert existing domain object definitions to Cypher format
+  - Create a separate Rust module using petgraph for graph operations
+  - Implement an Iced-based UI for graph visualization
+  - Establish NATS communication between core components and the visualization tool
+  - Define message formats for graph operations
+  - Test graph visualization with sample domain objects
+
 ## Completed Tasks
 
 *None yet*

@@ -21,8 +21,13 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Component deployment strategy
 - [x] Distributed event/object store strategy (NATS JetStream)
 - [x] Remote cloud resource integration approach
-- [x] Multi-tier storage strategy design (JetStream → MinIO → Wasabi)
+- [x] Multi-tier storage strategy design (JetStream → Cluster → Wasabi)
 - [x] Scaling architecture model (Leaf Node → 3-Node Cluster → Wasabi)
+- [x] Business focus definition (medium-sized businesses in vertical markets)
+- [x] Domain-driven design approach for vertical markets
+- [x] Design decision documentation system
+- [x] Domain objects definition for common and vertical domains
+- [x] Domain objects graph storage approach and visualization strategy
 
 ## In Progress
 
@@ -36,6 +41,11 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Event schema design
 - [ ] Object storage structure design
 - [ ] Event sourcing patterns
+- [ ] Common domain object definitions
+- [ ] Vertical market domain object definitions
+- [ ] Domain boundary definitions
+- [ ] Graph representation of domain objects (Cypher format)
+- [ ] Interface to domain graph visualization tool
 
 ## Upcoming Work
 
@@ -51,6 +61,12 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Event store implementation
 - [ ] Object store implementation
 - [ ] Cloud resource connectors
+- [ ] Common domain implementation (People, Organizations, Locations, Documents, Inventory)
+- [ ] Vertical market domain examples (healthcare, legal, manufacturing, etc.)
+- [ ] Cross-domain interaction patterns
+- [ ] Domain object Cypher representation
+- [ ] Custom graph visualization tool (Rust/Iced)
+- [ ] NATS interface for graph visualization
 
 ## Implementation Details
 
@@ -98,7 +114,21 @@ We've implemented a robust multi-tier scaling architecture:
 
 The scaling path follows: Leaf Node → 3-Node Cluster → Wasabi, allowing us to start with a single node deployment and scale up to a clustered environment when higher availability or processing capacity is required.
 
-For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md.
+Our architecture focuses on medium-sized businesses in vertical markets, using a domain-driven design approach that:
+1. **Uses Domains as Boundaries** - Creates clear separations between different domain concerns
+2. **Balances Vertical Specialization and Common Functionality** - Supports both industry-specific domains and common business domains
+3. **Enables Domain Composition** - Allows domains to be combined to meet specific business needs
+
+This approach allows us to address specialized vertical market requirements while leveraging common business domains that all organizations need.
+
+For domain object storage and visualization, we've adopted a phased approach:
+1. **Initial Storage in Cypher Format** - Domain objects will be stored in `/domain` directory as Cypher graph format for easy import into Neo4j when ready
+2. **Custom Visualization Tool** - A separate module using petgraph (Rust) and Iced UI framework will provide graph visualization capabilities
+3. **NATS-Based Communication** - The domain graph visualization tool will communicate with core components via NATS, maintaining consistency with our overall architecture
+
+This approach allows us to visualize and work with domain objects as a graph during development, while providing a clear path to Neo4j integration when the full system is deployed.
+
+For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
 
@@ -117,6 +147,14 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Optimizing event stream processing for performance
 - Securing access to shared object storage
 - Handling cloud resource connectivity challenges
+- Determining optimal domain boundaries between common and vertical-specific functionality
+- Managing cross-domain communication and consistency
+- Balancing domain isolation with integration needs
+- Handling domain evolution over time
+- Determining the right granularity for domain objects
+- Translating domain objects to an effective graph representation
+- Maintaining consistency between Cypher files and runtime objects
+- Designing efficient NATS communication patterns for graph operations
 
 ## Learnings and Insights
 
@@ -137,6 +175,14 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Leaf Node configuration optimizes local operations while allowing for system growth
 - 3-Node Cluster enables high availability for customer-facing services and handles compute-intensive tasks
 - Scaling from single node to cluster maintains consistent data and processing models
+- Domain-driven design provides a powerful approach to addressing vertical market needs
+- Clear domain boundaries improve maintainability and evolution
+- Common business domains can be reused across different vertical markets
+- Domain composition allows for flexible system configuration
+- Event sourcing aligns well with domain-driven design principles
+- Graph representation provides a natural model for domain objects and relationships
+- Cypher format provides a good intermediate representation before Neo4j deployment
+- Rust and petgraph offer high-performance graph operations during development
 
 ## Milestone Tracking
 

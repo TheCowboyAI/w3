@@ -17,6 +17,7 @@ Design the initial system architecture and core components for the Composable In
 - Establish cloud resource integration approach ✓
 - Define business focus and target audience ✓
 - Establish domain-driven design approach for vertical markets ✓
+- Define domain object graph storage and visualization approach ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -32,6 +33,7 @@ Design the initial system architecture and core components for the Composable In
 - Domain-driven design approach documentation ✓
 - Common domain object definitions (in progress)
 - Vertical market domain object examples (in progress)
+- Domain object graph storage strategy documentation ✓
 
 ## Task Details
 
@@ -95,7 +97,9 @@ Design the initial system architecture and core components for the Composable In
 - [ ] Define common domain objects (People, Organizations, Locations, Documents, Inventory)
 - [ ] Create vertical market domain examples
 - [ ] Design cross-domain interaction patterns
-- [ ] Document domain event flows
+- [x] Document domain event flows
+- [x] Define domain object graph storage approach
+- [x] Design domain object visualization strategy
 
 ### Implementation Architecture
 - [x] Select base technology platform (NixOS)
@@ -230,6 +234,29 @@ Established two key architectural principles:
 These principles will guide our implementation approach, ensuring the system addresses specific vertical market needs while leveraging common business functionality. The domain-driven approach aligns well with our event sourcing strategy, as each domain can maintain its own event streams.
 
 Documentation added as design decisions in docs/notes/ and reflected in productContext.md.
+
+### 2023-04-05: Domain Object Graph Storage and Visualization
+Established an approach for storing and visualizing domain objects as a graph:
+
+1. **Cypher-Based Storage**:
+   - Domain objects will be stored in `/domain` as Cypher graph format
+   - This enables easy import into Neo4j when the system is ready
+   - Provides a textual representation that can be version-controlled
+
+2. **Custom Visualization Tool**:
+   - Will develop a separate module using petgraph (Rust graph library) 
+   - Will implement a custom viewer with Iced UI framework
+   - Enables graph visualization during development
+   - Supports common graph operations and queries
+
+3. **NATS Integration**:
+   - Graph visualization tool will communicate with core system via NATS
+   - Maintains consistent communication patterns with overall architecture
+   - Enables event-driven updates to the graph visualization
+
+This approach allows us to work with domain objects as a graph during development while providing a clear path to Neo4j integration when the full system is deployed. The use of NATS for communication ensures consistency with our overall architecture.
+
+Documentation added as a design decision in docs/notes/006-domain-objects-graph-storage.md.
 
 ## Time Estimate
 The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.

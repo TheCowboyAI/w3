@@ -11,26 +11,27 @@ This directory contains documented design decisions for the CIM project. Each de
 | [003](003-nixos-hyperconverged-implementation.md) | NixOS Hyper-Converged Implementation | 2023-04-04 | Details the NixOS-based deployment with containerized components |
 | [004](004-business-focus-and-audience.md) | Business Focus and Hybrid Cloud Approach | 2023-04-05 | Defines the target audience as medium-sized businesses and outlines the hybrid approach to cloud resources |
 | [005](005-domain-driven-vertical-markets.md) | Domain-Driven Design for Vertical Markets | 2023-04-05 | Describes how domain boundaries enable addressing specialized vertical market requirements while leveraging common business domains |
+| [006](006-domain-objects-graph-storage.md) | Domain Objects as Graph Storage | 2023-04-05 | Outlines the phased approach to storing domain objects as graphs using Cypher files and a custom Rust/Iced viewer before Neo4j integration |
 
 ## Decision Relationships
 
 ```
-┌─────────────────────────┐            ┌─────────────────────────┐
-│                         │            │                         │
-│ 004: Business Focus &   │◄───────────┤ 005: Domain-Driven      │
-│ Hybrid Cloud Approach   │    Aligns  │ Design for Vertical     │
-│                         │    with    │ Markets                 │
-└─────────┬───────────────┘            └───────────┬─────────────┘
-          │                                        │
-          │ Drives                                 │ Influences
-          │                                        │
-          ▼                                        ▼
-┌────────────────────────┐                 ┌────────────────────────┐
-│                        │                 │                        │
-│ 003: NixOS             │                 │ 002: NATS JetStream    │
-│ Hyper-Converged        │◄────────┐      │ Dual Role              │
-│ Implementation         │         │      │                        │
-│                        │         │      └───────────┬────────────┘
+┌─────────────────────────┐            ┌─────────────────────────┐            ┌─────────────────────────┐
+│                         │            │                         │            │                         │
+│ 004: Business Focus &   │◄───────────┤ 005: Domain-Driven      │────────────► 006: Domain Objects     │
+│ Hybrid Cloud Approach   │    Aligns  │ Design for Vertical     │  Implements│ as Graph Storage        │
+│                         │    with    │ Markets                 │            │                         │
+└─────────┬───────────────┘            └───────────┬─────────────┘            └───────────┬─────────────┘
+          │                                        │                                      │
+          │ Drives                                 │ Influences                           │ Uses
+          │                                        │                                      │
+          ▼                                        ▼                                      ▼
+┌────────────────────────┐                 ┌────────────────────────┐            ┌────────────────────────┐
+│                        │                 │                        │            │                        │
+│ 003: NixOS             │                 │ 002: NATS JetStream    │◄───────────┤ 002: NATS JetStream    │
+│ Hyper-Converged        │◄────────┐      │ Dual Role              │            │ Dual Role              │
+│ Implementation         │         │      │                        │            │                        │
+│                        │         │      └───────────┬────────────┘            └────────────────────────┘
 └───────────┬────────────┘         │                  │
             │                      │                  │
             │                      │                  │
