@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system and are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -29,6 +29,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Domain objects definition for common and vertical domains
 - [x] Domain objects graph storage approach and visualization strategy
 - [x] Service interfaces and MCP integration approach
+- [x] Base CIM services definition and integration patterns
 
 ## In Progress
 
@@ -49,6 +50,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Interface to domain graph visualization tool
 - [ ] NATS subject naming conventions
 - [ ] MCP interface definitions for core services
+- [ ] Detailed specifications for each base CIM service
+- [ ] Service-specific NATS subject patterns
 
 ## Upcoming Work
 
@@ -73,6 +76,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] MCP server implementation for custom tools
 - [ ] Service registry implementation
 - [ ] Standard NATS message formats
+- [ ] Base CIM service implementation
+- [ ] Third-party integration modules for each service
+- [ ] Service-specific MCP interface documentation
 
 ## Implementation Details
 
@@ -141,6 +147,23 @@ For backend service interfaces, we've established a dual-interface approach:
 
 This approach provides consistent access to backend resources while enabling AI-driven operations and integrating efficiently with third-party tools.
 
+We've defined the core services that will constitute a base CIM installation:
+
+1. **AI**: AI Chat Interface for system-wide interaction with multiple tuned models
+2. **NATS**: Messaging backbone, event store, and object store
+3. **Git**: Version control for configurations, source code, and issue tracking
+4. **Mail**: Email system for communication and notifications
+5. **Search**: Centralized search capabilities via SearXNG
+6. **Docs**: Document management using PaperlessNG
+7. **Web**: Web portal for unified system access
+8. **WF**: Workflow automation via n8n
+9. **Vault**: Secret management via Vaultwarden
+10. **Notes**: Knowledge management with Obsidian or Trilium Next
+11. **Feeds**: RSS feed integration for content processing
+12. **DB**: Database services with Neo4j and PostgreSQL
+
+Each service will be deployed as a containerized component, communicating via NATS and exposing MCP interfaces for AI interaction. Together, they form a complete information management ecosystem that can be composed to address specific vertical market needs.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -172,6 +195,14 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Balancing standardization with flexibility in service interfaces
 - Coordinating vendor-supplied and custom MCP interfaces
 - Documenting interface contracts for both NATS and MCP patterns
+- [x] Balancing standardization with flexibility in service interfaces
+- [x] Coordinating vendor-supplied and custom MCP interfaces
+- [x] Documenting interface contracts for both NATS and MCP patterns
+- [ ] Defining service-specific NATS subject patterns
+- [ ] Integrating third-party services with consistent patterns
+- [ ] Managing service dependencies and startup sequence
+- [ ] Ensuring consistent user experience across multiple service UIs
+- [ ] Balancing containerization overhead with resource efficiency
 
 ## Learnings and Insights
 
@@ -204,12 +235,18 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - MCP offers a standardized way for AI to interact with system services
 - Leveraging vendor-provided interfaces reduces development overhead
 - Dual-interface approach (NATS and MCP) balances system integration with AI capabilities
+- Base CIM services provide a complete foundation for information management
+- Containerized deployment enables independent scaling of services
+- A composable approach allows for tailoring the system to specific vertical markets
+- Third-party integration can be standardized through our dual-interface architecture
+- Common services across vertical markets reduce development and maintenance overhead
+- Service composition enables addressing specific market needs without custom development
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, domain patterns, and implementation approach
-- Status: High-level design, domain patterns, and implementation architecture complete; detailed design in progress
+- Target: Define system architecture, core components, domain patterns, implementation approach, and base CIM services
+- Status: High-level design, domain patterns, implementation architecture, and base services definition complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept

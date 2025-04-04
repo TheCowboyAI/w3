@@ -5,7 +5,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ## Active Tasks
 
 ### [001 - Initial System Design](tasks/001-initial-system-design.md)
-- **Status**: In Progress (90% complete)
+- **Status**: In Progress (95% complete)
 - **Priority**: High
 - **Description**: Design the initial architecture of the CIM system
 - **Progress**:
@@ -18,6 +18,8 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Domain-driven design approach established
   - ✓ Common domain objects defined
   - ✓ Vertical market domain examples created
+  - ✓ Service interfaces and MCP integration approach defined
+  - ✓ Base CIM services defined (AI, NATS, Git, Mail, Search, Docs, Web, WF, Vault, Notes, Feeds, DB)
   - ⏳ Cross-domain interaction patterns
   - ⏳ Domain event flow documentation
   - ⏳ Detailed component specifications
@@ -85,6 +87,23 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - Develop service discovery and registry mechanism
   - Create testing tools for NATS and MCP interfaces
   - Implement example services with dual interfaces
+
+### 009 - Base CIM Services Implementation
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement the core services defined in the base CIM
+- **Dependencies**: 001 - Initial System Design, 003 - NATS JetStream Configuration, 004 - NixOS Module Framework
+- **Subtasks**:
+  - Configure containerized deployment for each service
+  - Establish NATS communication between services
+  - Implement MCP interfaces for AI interaction
+  - Create standard deployment configurations
+  - Develop service-specific NATS subject patterns
+  - Document service APIs and interfaces
+  - Implement third-party integrations for each service
+  - Create common UI elements for web access
+  - Set up development and testing environments
+  - Design progressive deployment strategy
 
 ## Completed Tasks
 

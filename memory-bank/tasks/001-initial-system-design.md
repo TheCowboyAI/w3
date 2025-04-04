@@ -19,6 +19,7 @@ Design the initial system architecture and core components for the Composable In
 - Establish domain-driven design approach for vertical markets ✓
 - Define domain object graph storage and visualization approach ✓
 - Define service interfaces and MCP integration approach ✓
+- Define base CIM services and their integration patterns ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -36,6 +37,7 @@ Design the initial system architecture and core components for the Composable In
 - Vertical market domain object examples (in progress)
 - Domain object graph storage strategy documentation ✓
 - Service interfaces and MCP integration documentation ✓
+- Base CIM services documentation ✓
 
 ## Task Details
 
@@ -133,160 +135,31 @@ Design the initial system architecture and core components for the Composable In
 - [ ] Define fault tolerance approaches
 - [ ] Create distributed security model
 
-## Progress Notes
+### 2023-04-05: Base CIM Services Definition
+Established the core services that constitute a base CIM installation:
 
-### 2023-04-04: Initial System Design
-Completed the high-level system architecture design. Identified seven core components:
-1. Information Unit System
-2. Component Registry
-3. Pipeline Engine
-4. Plugin System
-5. Storage Manager
-6. User Interface Framework
-7. Integration Hub
+1. **AI**: AI Chat Interface with access to MCP servers and multiple tuned models
+2. **NATS**: Messaging backbone for inter-service communication, event store, and object store
+3. **Git**: Version control for configurations, source code, and issue tracking
+4. **Mail**: Email system for communication, workflow integration, and notifications
+5. **Search**: Centralized search via SearXNG with API-based access
+6. **Docs**: Document management (such as PaperlessNG) for storage, tagging, and retrieval
+7. **Web**: Web portal for unified system access and consistent user experience
+8. **WF**: Workflow automation via n8n for process orchestration
+9. **Vault**: Secret management via Vaultwarden for secure credential storage
+10. **Notes**: Knowledge management (such as Obsidian or Trilium Next) for notes and knowledge graphs
+11. **Feeds**: RSS feed integration for content processing and routing
+12. **DB**: Database services with Neo4j for graph data and PostgreSQL for relational data
 
-Defined the component interaction model using message passing, interface contracts, and dependency injection. Established data flow mechanisms including pipeline processing, transformation chains, and event streaming. Identified key extension points for components, interfaces, integration, and types.
+These services collectively form a complete information management ecosystem, with each service implemented as a containerized component following our dual-interface approach (NATS and MCP). For third-party tools, we'll leverage official MCP interfaces where available and develop custom NATS integrations around their APIs.
 
-Documentation created in memory-bank/system_design.md.
-
-### 2023-04-04: Domain Pattern Definition
-Defined nine domain pattern categories that provide guidance on information organization, processing, and presentation:
-1. Information Classification Patterns
-2. Knowledge Representation Patterns
-3. Information Retrieval Patterns
-4. Content Processing Patterns
-5. Information Synthesis Patterns
-6. Collaborative Information Patterns
-7. Information Lifecycle Patterns
-8. Context Management Patterns
-9. Adaptation Patterns
-
-Each category includes multiple specific patterns with implementation details. These domain patterns will inform how the technical components are implemented and interact.
-
-Documentation created in memory-bank/domainPatterns.md and referenced in system_design.md.
-
-### 2023-04-04: Implementation Architecture Decision
-Determined that the CIM will be implemented as a hyper-converged solution using NixOS:
-- Core system will be built as a NixOS configuration for the host
-- Functionality will be added through modular NixOS modules
-- Individual components will be deployed as isolated nixos-containers
-- Host will be minimal, focusing on security, container hosting, and NATS messaging
-- System will be part of a broader inventory management
-
-This approach aligns well with our modular component architecture, providing clear deployment boundaries while enabling efficient communication between components.
-
-Documentation updated in memory-bank/techContext.md.
-
-### 2023-04-04: Event/Object Store and Distributed Architecture
-Decided to use NATS JetStream as both an Event Store and Object Store, providing:
-- Persistent event sourcing for reliable state management
-- Event streaming for component communication
-- Object storage for binary data and shared resources
-- Integration with remote cloud resources
-
-While the system is primarily hyper-converged on a central server, it will also communicate with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
-
-Documentation updated in memory-bank/techContext.md.
-
-### 2023-04-05: Multi-Tier Storage Strategy
-Implemented a robust multi-tier storage strategy that extends beyond the hyper-converged system:
-1. **Primary Tier (NATS JetStream)** - Real-time storage within the hyper-converged system
-2. **Secondary Tier (Cluster)** - 3-node replica of the leaf node for high availability and compute-intensive tasks
-3. **Tertiary Tier (Wasabi)** - Long-term archival storage for durability and disaster recovery
-
-This approach provides multiple benefits:
-- Performance optimization for active data in JetStream
-- High availability through 3-node cluster
-- Long-term durability and disaster recovery with Wasabi
-- Cost-effective storage tiering based on access patterns
-
-Documentation updated in memory-bank/techContext.md with a new architecture diagram.
-
-### 2023-04-05: Scaling Architecture Enhancement
-Defined a comprehensive scaling architecture model:
-1. **"Leaf Node"** - Single hyper-converged node serving as the local system entry point
-   - Complete functionality in a self-contained system
-   - Optimized for local connections and processing
-   - Projects data to cluster tier for high availability
-
-2. **3-Node Cluster** - Replica of the leaf node in clustered configuration
-   - Provides high availability for customer-facing services
-   - Handles compute-intensive tasks offloaded from leaf nodes
-   - Distributes load across multiple nodes
-   - Manages data replication to Wasabi for long-term storage
-
-The scaling path (Leaf Node → 3-Node Cluster → Wasabi) allows for flexible deployment models that can adapt to different operational requirements. Leaf nodes focus on local processing while offloading intensive tasks to the cluster, creating an efficient division of responsibilities.
-
-Documentation updated in memory-bank/techContext.md with enhanced architecture diagram and scaling details.
-
-### 2023-04-05: Business Focus and Domain-Driven Design
-Established two key architectural principles:
-
-1. **Business Focus on Medium-Sized Businesses in Vertical Markets**
-   - Defined target audience as medium-sized businesses needing specialized workflows
-   - Established hybrid cloud approach with internal critical data
-   - Outlined progressive scaling from single leaf node to cluster
-   - Created value proposition focusing on independence and specialized solutions
-
-2. **Domain-Driven Design for Vertical Markets**
-   - Established domain-driven approach with clear domain boundaries
-   - Balanced vertical market specialization with common functionality
-   - Defined composition model for combining domains
-   - Identified common business domains applicable across industries
-   - Outlined vertical market domains for specialized industry segments
-
-These principles will guide our implementation approach, ensuring the system addresses specific vertical market needs while leveraging common business functionality. The domain-driven approach aligns well with our event sourcing strategy, as each domain can maintain its own event streams.
-
-Documentation added as design decisions in docs/notes/ and reflected in productContext.md.
-
-### 2023-04-05: Domain Object Graph Storage and Visualization
-Established an approach for storing and visualizing domain objects as a graph:
-
-1. **Cypher-Based Storage**:
-   - Domain objects will be stored in `/domain` as Cypher graph format
-   - This enables easy import into Neo4j when the system is ready
-   - Provides a textual representation that can be version-controlled
-
-2. **Custom Visualization Tool**:
-   - Will develop a separate module using petgraph (Rust graph library) 
-   - Will implement a custom viewer with Iced UI framework
-   - Enables graph visualization during development
-   - Supports common graph operations and queries
-
-3. **NATS Integration**:
-   - Graph visualization tool will communicate with core system via NATS
-   - Maintains consistent communication patterns with overall architecture
-   - Enables event-driven updates to the graph visualization
-
-This approach allows us to work with domain objects as a graph during development while providing a clear path to Neo4j integration when the full system is deployed. The use of NATS for communication ensures consistency with our overall architecture.
-
-Documentation added as a design decision in docs/notes/006-domain-objects-graph-storage.md.
-
-### 2023-04-05: Service Interfaces and MCP Integration
-Defined an approach for exposing backend services and integrating with AI:
-
-1. **Dual-Interface Strategy**:
-   - Primary interfaces exposed via NATS subject-based messaging
-   - AI interaction through MCP (Mission Control Protocol) servers
-   - This provides uniform access across the system while enabling AI-driven operations
-
-2. **Third-Party Tool Integration**:
-   - For tools with official MCP interfaces (e.g., paperlessng):
-     - Utilize the vendor-provided MCP interface
-     - Only extend if absolutely necessary
-   - For tools without MCP interfaces or with special needs:
-     - Develop custom MCP servers as adaptors
-     - Implement specialized processes as needed
-
-This approach balances standardization with flexibility, allowing us to expose backend services consistently while supporting both common and specialized needs. It leverages vendor expertise where available and enables custom solutions where needed.
-
-Documentation added as a design decision in docs/notes/007-service-interfaces-and-mcp-integration.md.
+Documentation added as a design decision in docs/notes/008-base-cim-services.md.
 
 ## Time Estimate
-The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.
+The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, and base CIM services definition are complete. Detailed specifications will require additional time to develop.
 
 ## Dependencies
 None - This is the initial design task.
 
 ## Notes
-This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, and distributed strategy are now complete, but detailed component specifications, interface definitions, NixOS module design, and event schema design need further development. 
+This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, distributed strategy, and base CIM services are now defined, but detailed component specifications, interface definitions, NixOS module design, and event schema design need further development. 
