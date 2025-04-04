@@ -9,10 +9,21 @@ This directory contains documented design decisions for the CIM project. Each de
 | [001](001-multi-tier-scaling-architecture.md) | Multi-tier Scaling Architecture | 2023-04-05 | Defines the three-tier architecture: Leaf Node → 3-Node Cluster → Wasabi |
 | [002](002-nats-jetstream-dual-role.md) | NATS JetStream Dual Role | 2023-04-04 | Establishes NATS JetStream as both Event Store and Object Store |
 | [003](003-nixos-hyperconverged-implementation.md) | NixOS Hyper-Converged Implementation | 2023-04-04 | Details the NixOS-based deployment with containerized components |
+| [004](004-business-focus-and-audience.md) | Business Focus and Hybrid Cloud Approach | 2023-04-05 | Defines the target audience as medium-sized businesses and outlines the hybrid approach to cloud resources |
 
 ## Decision Relationships
 
 ```
+┌─────────────────────────┐
+│                         │
+│ 004: Business Focus &   │
+│ Hybrid Cloud Approach   │
+│                         │
+└─────────┬───────────────┘
+          │
+          │ Drives
+          │
+          ▼
 ┌────────────────────────┐
 │                        │
 │ 003: NixOS             │
