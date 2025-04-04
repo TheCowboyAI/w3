@@ -62,6 +62,30 @@ The Composable Information Machine (CIM) is built on a modular, component-based 
    - Protocol adapters
    - Format converters
 
+## Domain Patterns
+
+In addition to the system architecture components, the CIM implements several domain-specific pattern sets that guide information organization, processing, and presentation:
+
+1. **Information Classification Patterns**: Taxonomy systems, tagging mechanisms, categorization schemes, and information hierarchies.
+
+2. **Knowledge Representation Patterns**: Semantic networks, knowledge graphs, concept mapping, and ontology structures.
+
+3. **Information Retrieval Patterns**: Search strategies, query languages, relevance ranking, and faceted navigation.
+
+4. **Content Processing Patterns**: Text analysis methods, media processing approaches, structured data extraction, and natural language understanding.
+
+5. **Information Synthesis Patterns**: Knowledge aggregation, summary generation, insight extraction, and cross-reference analysis.
+
+6. **Collaborative Information Patterns**: Multi-user workflows, access control models, commenting/annotation systems, and change tracking mechanisms.
+
+7. **Information Lifecycle Patterns**: Creation workflows, curation processes, aging mechanisms, and archival strategies.
+
+8. **Context Management Patterns**: Task contexts, user preference modeling, project workspaces, and information collection structures.
+
+9. **Adaptation Patterns**: User behavior learning, personalization mechanisms, adaptive information presentation, and intelligent suggestions.
+
+For detailed information on these domain patterns, see [domainPatterns.md](domainPatterns.md).
+
 ## Component Interaction Model
 
 Components interact through:
