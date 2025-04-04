@@ -29,6 +29,7 @@ We are currently in the Initial Design phase (Level 0) of the CIM project. The f
 - Created component deployment strategy
 - Established NATS JetStream as event store and object store
 - Defined distributed architecture with remote cloud resource integration
+- Implemented multi-tier storage strategy with MinIO NAS projection and Wasabi long-term storage
 
 ## Action Items
 
@@ -51,6 +52,8 @@ We are currently in the Initial Design phase (Level 0) of the CIM project. The f
 ## Implementation Status
 
 The project is in the conceptualization phase. We have completed the high-level system design, domain pattern definition, and determined the implementation architecture (NixOS with containers and NATS JetStream for event/object storage), but implementation has not yet begun. The system_design.md file contains the current architectural design, domainPatterns.md defines the domain-specific patterns, and techContext.md details the implementation approach.
+
+We've established a robust multi-tier storage strategy that projects NATS JetStream files to a NAS running MinIO for decentralized distribution, with further replication to Wasabi for long-term storage. This approach provides performance, geographical redundancy, and durability across different storage tiers.
 
 ## Current Challenges
 

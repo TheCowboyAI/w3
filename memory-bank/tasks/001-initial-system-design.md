@@ -88,6 +88,7 @@ Design the initial system architecture and core components for the Composable In
 - [x] Define event store capabilities
 - [x] Establish object storage approach
 - [x] Determine persistence strategies
+- [x] Design multi-tier storage architecture (JetStream → MinIO → Wasabi)
 - [ ] Design event schemas
 - [ ] Define event processing patterns
 - [ ] Create object storage access patterns
@@ -154,6 +155,20 @@ Decided to use NATS JetStream as both an Event Store and Object Store, providing
 While the system is primarily hyper-converged on a central server, it will also communicate with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
 
 Documentation updated in memory-bank/techContext.md.
+
+### 2023-04-05: Multi-Tier Storage Strategy
+Implemented a robust multi-tier storage strategy that extends beyond the hyper-converged system:
+1. **Primary Tier (NATS JetStream)** - Real-time storage within the hyper-converged system
+2. **Secondary Tier (MinIO on NAS)** - JetStream files projected to NAS for decentralized distribution
+3. **Tertiary Tier (Wasabi)** - MinIO S3 buckets replicated to Wasabi for long-term storage
+
+This approach provides multiple benefits:
+- Performance optimization for active data in JetStream
+- Decentralized access through S3-compatible MinIO interface
+- Long-term durability and disaster recovery with Wasabi
+- Cost-effective storage tiering based on access patterns
+
+Documentation updated in memory-bank/techContext.md with a new architecture diagram.
 
 ## Time Estimate
 The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.

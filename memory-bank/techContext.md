@@ -40,6 +40,34 @@ NATS JetStream will serve dual critical roles in our architecture:
 
 This approach enables both local and distributed components to share a common event and data infrastructure, enhancing resilience and scalability.
 
+### Multi-Tier Storage Strategy
+
+The system implements a robust multi-tier storage strategy:
+
+1. **Primary Tier: NATS JetStream**
+   - Real-time event and object storage within the hyper-converged system
+   - Provides immediate access for system components
+   - Optimized for performance and availability
+
+2. **Secondary Tier: MinIO on NAS**
+   - NATS JetStream files are projected to a NAS device running MinIO
+   - Provides decentralized distribution outside the hyper-converged system
+   - Enables S3-compatible access to events and objects
+   - Adds geographical redundancy and access flexibility
+
+3. **Tertiary Tier: Wasabi Cloud Storage**
+   - MinIO S3 buckets are replicated to Wasabi
+   - Provides long-term archival storage
+   - Ensures data durability beyond local infrastructure
+   - Cost-effective solution for cold storage and disaster recovery
+
+This multi-tier approach provides:
+- Immediate performance with NATS JetStream
+- Decentralized access with MinIO
+- Long-term durability with Wasabi
+- Protection against various failure scenarios
+- Flexible access patterns for different use cases
+
 ### Component Deployment Strategy
 
 | Component | Deployment Approach |
@@ -81,10 +109,29 @@ This approach enables both local and distributed components to share a common ev
 │  │               │     NATS + JetStream         │             │  │
 │  │               │  (Event/Object Store)        │             │  │
 │  │               └──────────────────────────────┘             │  │
-│  │                                                             │  │
-│  └─────────────────────────────────────────────────────────────┘  │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
+│  │                           │                                 │  │
+│  └───────────────────────────┼─────────────────────────────────┘  │
+│                              │                                     │
+└──────────────────────────────┼─────────────────────────────────────┘
+                               │
+                               │ File Projection
+                               │
+                        ┌──────┴───────┐
+                        │              │
+                        │   NAS with   │
+                        │    MinIO     │
+                        │              │
+                        └──────┬───────┘
+                               │
+                               │ S3 Replication
+                               │
+                        ┌──────┴───────┐
+                        │              │
+                        │    Wasabi    │
+                        │  Long-term   │
+                        │   Storage    │
+                        │              │
+                        └──────────────┘
 ```
 
 ### Potential Backend Technologies

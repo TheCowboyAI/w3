@@ -21,6 +21,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Component deployment strategy
 - [x] Distributed event/object store strategy (NATS JetStream)
 - [x] Remote cloud resource integration approach
+- [x] Multi-tier storage strategy design (JetStream → MinIO → Wasabi)
 
 ## In Progress
 
@@ -89,6 +90,13 @@ NATS JetStream will serve dual critical roles:
 
 While the system is hyper-converged on a central server, it also communicates with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
 
+We've implemented a robust multi-tier storage strategy:
+1. **Primary Tier (NATS JetStream)** - Real-time storage within the hyper-converged system
+2. **Secondary Tier (MinIO on NAS)** - JetStream files projected to NAS for decentralized distribution
+3. **Tertiary Tier (Wasabi)** - MinIO S3 buckets replicated to Wasabi for long-term storage
+
+This approach ensures data resilience across multiple storage levels while maintaining performance for active data.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md.
 
 ## Known Issues and Challenges
@@ -124,6 +132,9 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Event sourcing provides robust audit trails and system recovery capabilities
 - Object storage in JetStream enables efficient sharing of binary data
 - Distributed communication through NATS enables cloud resource integration
+- Multi-tier storage strategy (JetStream → MinIO → Wasabi) balances performance, accessibility, and long-term durability
+- Projecting JetStream files to MinIO provides S3-compatible access outside the hyper-converged system
+- Wasabi integration ensures cost-effective long-term storage for archival and disaster recovery
 
 ## Milestone Tracking
 
