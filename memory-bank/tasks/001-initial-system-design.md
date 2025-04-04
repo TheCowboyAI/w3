@@ -20,6 +20,7 @@ Design the initial system architecture and core components for the Composable In
 - Define domain object graph storage and visualization approach ✓
 - Define service interfaces and MCP integration approach ✓
 - Define base CIM services and their integration patterns ✓
+- Define cross-domain interaction patterns ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -38,6 +39,7 @@ Design the initial system architecture and core components for the Composable In
 - Domain object graph storage strategy documentation ✓
 - Service interfaces and MCP integration documentation ✓
 - Base CIM services documentation ✓
+- Cross-domain interaction patterns documentation ✓
 
 ## Task Details
 
@@ -102,7 +104,7 @@ Design the initial system architecture and core components for the Composable In
 - [x] Outline domain composition methodology
 - [ ] Define common domain objects (People, Organizations, Locations, Documents, Inventory)
 - [ ] Create vertical market domain examples
-- [ ] Design cross-domain interaction patterns
+- [x] Design cross-domain interaction patterns
 - [x] Document domain event flows
 - [x] Define domain object graph storage approach
 - [x] Design domain object visualization strategy
@@ -155,11 +157,26 @@ These services collectively form a complete information management ecosystem, wi
 
 Documentation added as a design decision in docs/notes/008-base-cim-services.md.
 
+### 2023-04-06: Cross-Domain Interaction Patterns
+Established comprehensive patterns for interactions between domains:
+
+1. **Event-Based Integration**: Primary pattern using domain events published to NATS JetStream
+2. **Shared Reference Data**: Common domains serve as canonical sources with reference by ID
+3. **Domain Service Interfaces**: Explicit service interfaces via NATS subjects using command/query pattern
+4. **Saga Pattern**: For processes spanning multiple domains with compensating actions
+5. **Domain Relationship Registry**: Neo4j-based registry of relationships between entities across domains
+
+These patterns are implemented using our NATS JetStream architecture with standardized event structures and subject naming conventions. The implementation approach includes domain-specific NATS subjects following the convention `domain.entity.event/command/query` and process coordination via the n8n workflow service.
+
+We've documented concrete examples showing these patterns in action, including patient registration in the healthcare vertical and document upload workflows. Each example demonstrates how domains communicate while maintaining their boundaries.
+
+Documentation added as a design decision in docs/notes/009-cross-domain-interaction-patterns.md.
+
 ## Time Estimate
-The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, and base CIM services definition are complete. Detailed specifications will require additional time to develop.
+The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, and cross-domain interaction patterns are complete. We're now focused on detailed component specifications, interface definitions, and NixOS module design.
 
 ## Dependencies
 None - This is the initial design task.
 
 ## Notes
-This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, distributed strategy, and base CIM services are now defined, but detailed component specifications, interface definitions, NixOS module design, and event schema design need further development. 
+This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, distributed strategy, base CIM services, and cross-domain interaction patterns are now defined, but detailed component specifications, interface definitions, and NixOS module design need further development. 

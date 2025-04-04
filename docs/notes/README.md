@@ -14,6 +14,7 @@ This directory contains documented design decisions for the CIM project. Each de
 | [006](006-domain-objects-graph-storage.md) | Domain Objects as Graph Storage | 2023-04-05 | Outlines the phased approach to storing domain objects as graphs using Cypher files and a custom Rust/Iced viewer before Neo4j integration |
 | [007](007-service-interfaces-and-mcp-integration.md) | Service Interfaces and MCP Integration | 2023-04-05 | Defines the dual-interface approach with NATS for primary communication and MCP for AI integration |
 | [008](008-base-cim-services.md) | Base CIM Services | 2023-04-05 | Establishes the core services that constitute a base CIM installation and their integration patterns |
+| [009](009-cross-domain-interaction-patterns.md) | Cross-Domain Interaction Patterns | 2023-04-06 | Defines the patterns for communication and data sharing between domains while maintaining domain boundaries |
 
 ## Decision Relationships
 
@@ -51,8 +52,16 @@ This directory contains documented design decisions for the CIM project. Each de
 │                        │         │                                            │                        │
 │ 001: Multi-tier        │─────────┘                                            │ 008: Base CIM Services │
 │ Scaling Architecture   │                                                      │                        │
-│                        │                                                      └────────────────────────┘
-└────────────────────────┘
+│                        │                                                      └────────────┬───────────┘
+└────────────────────────┘                                                                   │
+                                                                                             │
+                                                                                             ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 009: Cross-Domain      │
+                                                                              │ Interaction Patterns   │
+                                                                              │                        │
+                                                                              └────────────────────────┘
 ```
 
 ## Using These Notes

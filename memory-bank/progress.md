@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system and are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system and established cross-domain interaction patterns. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -30,6 +30,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Domain objects graph storage approach and visualization strategy
 - [x] Service interfaces and MCP integration approach
 - [x] Base CIM services definition and integration patterns
+- [x] Cross-domain interaction patterns definition
 
 ## In Progress
 
@@ -164,6 +165,16 @@ We've defined the core services that will constitute a base CIM installation:
 
 Each service will be deployed as a containerized component, communicating via NATS and exposing MCP interfaces for AI interaction. Together, they form a complete information management ecosystem that can be composed to address specific vertical market needs.
 
+For cross-domain interactions, we've established comprehensive patterns that maintain domain boundaries while enabling communication:
+
+1. **Event-Based Integration** - The primary pattern uses domain events published to NATS JetStream
+2. **Shared Reference Data** - Common domains serve as canonical sources with reference by ID
+3. **Domain Service Interfaces** - Explicit service interfaces via NATS subjects using command/query pattern
+4. **Saga Pattern** - For processes spanning multiple domains with compensating actions
+5. **Domain Relationship Registry** - Neo4j-based registry of relationships between entities across domains
+
+These patterns maintain domain integrity while enabling complex business processes that span multiple domains. They rely on our NATS JetStream architecture with standardized event structures and subject naming conventions.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -241,12 +252,17 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Third-party integration can be standardized through our dual-interface architecture
 - Common services across vertical markets reduce development and maintenance overhead
 - Service composition enables addressing specific market needs without custom development
+- Event-based domain integration maintains domain boundaries while enabling communication
+- Canonical data sources in common domains reduce data duplication and inconsistency
+- Saga pattern provides a robust approach to cross-domain processes
+- Neo4j relationship registry makes cross-domain relationships explicit and traversable
+- Standardized event structures and subject naming improve system consistency
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, domain patterns, implementation approach, and base CIM services
-- Status: High-level design, domain patterns, implementation architecture, and base services definition complete; detailed design in progress
+- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, and cross-domain interaction patterns
+- Status: High-level design, domain patterns, implementation architecture, base services definition, and cross-domain interaction patterns complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept

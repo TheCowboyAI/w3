@@ -5,7 +5,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ## Active Tasks
 
 ### [001 - Initial System Design](tasks/001-initial-system-design.md)
-- **Status**: In Progress (95% complete)
+- **Status**: In Progress (97% complete)
 - **Priority**: High
 - **Description**: Design the initial architecture of the CIM system
 - **Progress**:
@@ -20,7 +20,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Vertical market domain examples created
   - ✓ Service interfaces and MCP integration approach defined
   - ✓ Base CIM services defined (AI, NATS, Git, Mail, Search, Docs, Web, WF, Vault, Notes, Feeds, DB)
-  - ⏳ Cross-domain interaction patterns
+  - ✓ Cross-domain interaction patterns defined
   - ⏳ Domain event flow documentation
   - ⏳ Detailed component specifications
   - ⏳ Interface definitions
