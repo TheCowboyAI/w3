@@ -18,6 +18,7 @@ Design the initial system architecture and core components for the Composable In
 - Define business focus and target audience ✓
 - Establish domain-driven design approach for vertical markets ✓
 - Define domain object graph storage and visualization approach ✓
+- Define service interfaces and MCP integration approach ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -34,6 +35,7 @@ Design the initial system architecture and core components for the Composable In
 - Common domain object definitions (in progress)
 - Vertical market domain object examples (in progress)
 - Domain object graph storage strategy documentation ✓
+- Service interfaces and MCP integration documentation ✓
 
 ## Task Details
 
@@ -58,6 +60,8 @@ Design the initial system architecture and core components for the Composable In
 - [ ] Establish API contracts
 - [ ] Design extension points
 - [ ] Document interface requirements
+- [x] Define service interface patterns
+- [x] Design MCP integration approach
 
 ### Data Flow Design
 - [x] Define data transmission patterns
@@ -257,6 +261,26 @@ Established an approach for storing and visualizing domain objects as a graph:
 This approach allows us to work with domain objects as a graph during development while providing a clear path to Neo4j integration when the full system is deployed. The use of NATS for communication ensures consistency with our overall architecture.
 
 Documentation added as a design decision in docs/notes/006-domain-objects-graph-storage.md.
+
+### 2023-04-05: Service Interfaces and MCP Integration
+Defined an approach for exposing backend services and integrating with AI:
+
+1. **Dual-Interface Strategy**:
+   - Primary interfaces exposed via NATS subject-based messaging
+   - AI interaction through MCP (Mission Control Protocol) servers
+   - This provides uniform access across the system while enabling AI-driven operations
+
+2. **Third-Party Tool Integration**:
+   - For tools with official MCP interfaces (e.g., paperlessng):
+     - Utilize the vendor-provided MCP interface
+     - Only extend if absolutely necessary
+   - For tools without MCP interfaces or with special needs:
+     - Develop custom MCP servers as adaptors
+     - Implement specialized processes as needed
+
+This approach balances standardization with flexibility, allowing us to expose backend services consistently while supporting both common and specialized needs. It leverages vendor expertise where available and enables custom solutions where needed.
+
+Documentation added as a design decision in docs/notes/007-service-interfaces-and-mcp-integration.md.
 
 ## Time Estimate
 The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.

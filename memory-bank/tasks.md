@@ -71,6 +71,21 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - Define message formats for graph operations
   - Test graph visualization with sample domain objects
 
+### 008 - Service Interfaces and MCP Integration
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement standardized service interfaces via NATS and MCP integration for AI interaction
+- **Dependencies**: 001 - Initial System Design, 003 - NATS JetStream Configuration
+- **Subtasks**:
+  - Establish NATS subject naming conventions
+  - Define standard message formats for service operations
+  - Create documentation templates for service interfaces
+  - Implement MCP server framework for custom tools
+  - Integrate with vendor-provided MCP interfaces
+  - Develop service discovery and registry mechanism
+  - Create testing tools for NATS and MCP interfaces
+  - Implement example services with dual interfaces
+
 ## Completed Tasks
 
 *None yet*
@@ -80,6 +95,8 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - Domain-driven design will guide our implementation approach
 - Event sourcing using NATS JetStream will provide a foundation for the domain objects
 - Common domains will be implemented first, followed by vertical market examples
+- Services will expose dual interfaces: NATS for system components and MCP for AI integration
+- Vendor-provided MCP interfaces will be preferred for third-party tools where available
 
 ## Task Legend
 

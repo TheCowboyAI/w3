@@ -28,6 +28,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Design decision documentation system
 - [x] Domain objects definition for common and vertical domains
 - [x] Domain objects graph storage approach and visualization strategy
+- [x] Service interfaces and MCP integration approach
 
 ## In Progress
 
@@ -46,6 +47,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Domain boundary definitions
 - [ ] Graph representation of domain objects (Cypher format)
 - [ ] Interface to domain graph visualization tool
+- [ ] NATS subject naming conventions
+- [ ] MCP interface definitions for core services
 
 ## Upcoming Work
 
@@ -67,6 +70,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Domain object Cypher representation
 - [ ] Custom graph visualization tool (Rust/Iced)
 - [ ] NATS interface for graph visualization
+- [ ] MCP server implementation for custom tools
+- [ ] Service registry implementation
+- [ ] Standard NATS message formats
 
 ## Implementation Details
 
@@ -128,6 +134,13 @@ For domain object storage and visualization, we've adopted a phased approach:
 
 This approach allows us to visualize and work with domain objects as a graph during development, while providing a clear path to Neo4j integration when the full system is deployed.
 
+For backend service interfaces, we've established a dual-interface approach:
+1. **NATS Subject-Based Messaging** - All backend services will be accessible via standardized NATS subjects, forming the primary interface for system components
+2. **MCP Integration** - Services will provide AI interfaces through Mission Control Protocol (MCP), enabling structured interaction with AI components
+3. **Vendor Integration Strategy** - We'll leverage vendor-provided MCP interfaces for third-party tools (like paperlessng) where available, while creating custom MCP servers for tools with specialized needs
+
+This approach provides consistent access to backend resources while enabling AI-driven operations and integrating efficiently with third-party tools.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -155,6 +168,10 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Translating domain objects to an effective graph representation
 - Maintaining consistency between Cypher files and runtime objects
 - Designing efficient NATS communication patterns for graph operations
+- Establishing consistent NATS subject naming conventions
+- Balancing standardization with flexibility in service interfaces
+- Coordinating vendor-supplied and custom MCP interfaces
+- Documenting interface contracts for both NATS and MCP patterns
 
 ## Learnings and Insights
 
@@ -183,6 +200,10 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Graph representation provides a natural model for domain objects and relationships
 - Cypher format provides a good intermediate representation before Neo4j deployment
 - Rust and petgraph offer high-performance graph operations during development
+- NATS subject-based messaging provides a flexible and scalable service interface
+- MCP offers a standardized way for AI to interact with system services
+- Leveraging vendor-provided interfaces reduces development overhead
+- Dual-interface approach (NATS and MCP) balances system integration with AI capabilities
 
 ## Milestone Tracking
 

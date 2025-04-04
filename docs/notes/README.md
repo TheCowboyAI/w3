@@ -12,6 +12,7 @@ This directory contains documented design decisions for the CIM project. Each de
 | [004](004-business-focus-and-audience.md) | Business Focus and Hybrid Cloud Approach | 2023-04-05 | Defines the target audience as medium-sized businesses and outlines the hybrid approach to cloud resources |
 | [005](005-domain-driven-vertical-markets.md) | Domain-Driven Design for Vertical Markets | 2023-04-05 | Describes how domain boundaries enable addressing specialized vertical market requirements while leveraging common business domains |
 | [006](006-domain-objects-graph-storage.md) | Domain Objects as Graph Storage | 2023-04-05 | Outlines the phased approach to storing domain objects as graphs using Cypher files and a custom Rust/Iced viewer before Neo4j integration |
+| [007](007-service-interfaces-and-mcp-integration.md) | Service Interfaces and MCP Integration | 2023-04-05 | Defines the dual-interface approach with NATS for primary communication and MCP for AI integration |
 
 ## Decision Relationships
 
@@ -24,24 +25,24 @@ This directory contains documented design decisions for the CIM project. Each de
 └─────────┬───────────────┘            └───────────┬─────────────┘            └───────────┬─────────────┘
           │                                        │                                      │
           │ Drives                                 │ Influences                           │ Uses
-          │                                        │                                      │
-          ▼                                        ▼                                      ▼
-┌────────────────────────┐                 ┌────────────────────────┐            ┌────────────────────────┐
-│                        │                 │                        │            │                        │
-│ 003: NixOS             │                 │ 002: NATS JetStream    │◄───────────┤ 002: NATS JetStream    │
-│ Hyper-Converged        │◄────────┐      │ Dual Role              │            │ Dual Role              │
-│ Implementation         │         │      │                        │            │                        │
-│                        │         │      └───────────┬────────────┘            └────────────────────────┘
-└───────────┬────────────┘         │                  │
-            │                      │                  │
-            │                      │                  │
-            ▼                      │                  ▼
-┌────────────────────────┐         │      ┌────────────────────────┐
-│                        │         │      │                        │
-│ 002: NATS JetStream    │─────────┘      │ 001: Multi-tier        │
-│ Dual Role              │                │ Scaling Architecture   │
-│                        │◄────────┐      │                        │
-└───────────┬────────────┘         │      └────────────────────────┘
+          │                                        │                                      ▼
+          ▼                                        ▼                              ┌────────────────────────┐
+┌────────────────────────┐                 ┌────────────────────────┐            │                        │
+│                        │                 │                        │            │ 002: NATS JetStream    │
+│ 003: NixOS             │                 │ 002: NATS JetStream    │◄───────────┤ Dual Role              │
+│ Hyper-Converged        │◄────────┐      │ Dual Role              │            │                        │
+│ Implementation         │         │      │                        │            └────────────┬───────────┘
+│                        │         │      └───────────┬────────────┘                        │
+└───────────┬────────────┘         │                  │                                     │
+            │                      │                  │                                     │
+            │                      │                  │                                     │
+            ▼                      │                  ▼                                     ▼
+┌────────────────────────┐         │      ┌────────────────────────┐            ┌────────────────────────┐
+│                        │         │      │                        │            │                        │
+│ 002: NATS JetStream    │─────────┘      │ 001: Multi-tier        │            │ 007: Service Interfaces│
+│ Dual Role              │                │ Scaling Architecture   │            │ and MCP Integration    │
+│                        │◄────────┐      │                        │            │                        │
+└───────────┬────────────┘         │      └────────────────────────┘            └────────────────────────┘
             │                      │
             │                      │
             ▼                      │
