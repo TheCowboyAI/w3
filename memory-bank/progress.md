@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers. We are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -19,6 +19,8 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Integration of domain patterns into system design
 - [x] Implementation architecture definition (NixOS with containers)
 - [x] Component deployment strategy
+- [x] Distributed event/object store strategy (NATS JetStream)
+- [x] Remote cloud resource integration approach
 
 ## In Progress
 
@@ -29,6 +31,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Domain pattern implementation guidelines
 - [ ] NixOS module structure design
 - [ ] Container communication patterns
+- [ ] Event schema design
+- [ ] Object storage structure design
+- [ ] Event sourcing patterns
 
 ## Upcoming Work
 
@@ -41,6 +46,9 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [ ] Initial NixOS configuration
 - [ ] Container resource specifications
 - [ ] NATS messaging implementation
+- [ ] Event store implementation
+- [ ] Object store implementation
+- [ ] Cloud resource connectors
 
 ## Implementation Details
 
@@ -75,6 +83,12 @@ The implementation architecture will use NixOS as a hyper-converged solution:
 - Minimal host focused on security, container hosting, and NATS messaging
 - Part of a broader inventory management system
 
+NATS JetStream will serve dual critical roles:
+1. **Event Store** - For event sourcing, event streaming, and distributed event processing
+2. **Object Store** - For persistent storage, binary object storage, and shared resource access
+
+While the system is hyper-converged on a central server, it also communicates with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md.
 
 ## Known Issues and Challenges
@@ -89,6 +103,11 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Defining appropriate resource boundaries for containers
 - Establishing secure communication patterns between containers
 - Designing for efficient state management across containerized components
+- Ensuring event schema consistency across distributed components
+- Managing eventual consistency in a distributed architecture
+- Optimizing event stream processing for performance
+- Securing access to shared object storage
+- Handling cloud resource connectivity challenges
 
 ## Learnings and Insights
 
@@ -102,6 +121,9 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - NixOS containers provide a good balance of isolation and resource efficiency
 - A shared messaging system (NATS) simplifies inter-component communication
 - Declarative configuration via NixOS supports reproducible deployments
+- Event sourcing provides robust audit trails and system recovery capabilities
+- Object storage in JetStream enables efficient sharing of binary data
+- Distributed communication through NATS enables cloud resource integration
 
 ## Milestone Tracking
 
@@ -111,12 +133,12 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept
-- Target: Implement core functionality in a limited scope with initial NixOS configuration
+- Target: Implement core functionality in a limited scope with initial NixOS configuration and NATS JetStream
 - Status: Not started
 - ETA: TBD
 
 ### Milestone 3: MVP
-- Target: Develop minimum viable product with essential features as containerized components
+- Target: Develop minimum viable product with essential features as containerized components with event sourcing
 - Status: Not started
 - ETA: TBD
 

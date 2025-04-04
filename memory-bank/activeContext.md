@@ -10,6 +10,7 @@ We are currently in the Initial Design phase (Level 0) of the CIM project. The f
 4. Establishing capabilities and features ✓
 5. Defining domain patterns ✓
 6. Determining implementation architecture ✓
+7. Defining distributed event/object store strategy ✓
 
 ## Recent Changes
 
@@ -26,6 +27,8 @@ We are currently in the Initial Design phase (Level 0) of the CIM project. The f
 - Integrated domain patterns into system design
 - Defined NixOS-based implementation architecture with containers
 - Created component deployment strategy
+- Established NATS JetStream as event store and object store
+- Defined distributed architecture with remote cloud resource integration
 
 ## Action Items
 
@@ -40,10 +43,14 @@ We are currently in the Initial Design phase (Level 0) of the CIM project. The f
 - Design initial NixOS module structure
 - Define NATS messaging patterns for inter-component communication
 - Create container resource specifications
+- Define event schemas and event sourcing patterns
+- Design object storage structure and access patterns
+- Document cloud resource integration approach
+- Establish event stream processing workflows
 
 ## Implementation Status
 
-The project is in the conceptualization phase. We have completed the high-level system design and domain pattern definition, and determined the implementation architecture (NixOS with containers), but implementation has not yet begun. The system_design.md file contains the current architectural design, domainPatterns.md defines the domain-specific patterns, and techContext.md details the implementation approach.
+The project is in the conceptualization phase. We have completed the high-level system design, domain pattern definition, and determined the implementation architecture (NixOS with containers and NATS JetStream for event/object storage), but implementation has not yet begun. The system_design.md file contains the current architectural design, domainPatterns.md defines the domain-specific patterns, and techContext.md details the implementation approach.
 
 ## Current Challenges
 
@@ -57,6 +64,11 @@ The project is in the conceptualization phase. We have completed the high-level 
 - Defining appropriate resource boundaries for containers
 - Establishing secure communication patterns between containers
 - Designing for efficient state management across containerized components
+- Ensuring event schema consistency across distributed components
+- Managing eventual consistency in a distributed architecture
+- Optimizing event stream processing for performance
+- Securing access to shared object storage
+- Handling cloud resource connectivity challenges
 
 ## Notes
 
@@ -74,5 +86,7 @@ These components interact through message passing, interface contracts, and depe
 Additionally, we've defined nine domain pattern categories that provide guidance on information organization, processing, and presentation, which will inform how the technical components are implemented and interact.
 
 The implementation architecture will use NixOS as a hyper-converged solution, with core functionality implemented as NixOS modules and individual components deployed as nixos-containers. The host system will be minimal, focused on security, container management, and providing a shared NATS messaging system for inter-component communication.
+
+NATS JetStream will serve as both an Event Store and Object Store, enabling event sourcing patterns and shared object storage across components. While the system is hyper-converged on a central server, it also communicates with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
 
 This file will be updated continuously as the project progresses. It serves as a snapshot of current activities and focus areas. 

@@ -13,6 +13,8 @@ Design the initial system architecture and core components for the Composable In
 - Create extensibility framework ✓
 - Define domain patterns ✓
 - Determine implementation architecture ✓
+- Define distributed event/object store strategy ✓
+- Establish cloud resource integration approach ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -22,6 +24,8 @@ Design the initial system architecture and core components for the Composable In
 - Extension point documentation ✓
 - Domain pattern documentation ✓
 - Implementation architecture documentation ✓
+- Event/object store strategy documentation ✓
+- Distributed architecture documentation ✓
 
 ## Task Details
 
@@ -79,6 +83,23 @@ Design the initial system architecture and core components for the Composable In
 - [ ] Design NixOS module structure
 - [ ] Define container resource specifications
 
+### Event/Object Store Strategy
+- [x] Select event sourcing technology (NATS JetStream)
+- [x] Define event store capabilities
+- [x] Establish object storage approach
+- [x] Determine persistence strategies
+- [ ] Design event schemas
+- [ ] Define event processing patterns
+- [ ] Create object storage access patterns
+
+### Distributed Architecture
+- [x] Define local vs. remote components approach
+- [x] Establish cloud resource integration strategy
+- [x] Select distributed communication mechanism
+- [ ] Design consistency models
+- [ ] Define fault tolerance approaches
+- [ ] Create distributed security model
+
 ## Progress Notes
 
 ### 2023-04-04: Initial System Design
@@ -123,11 +144,22 @@ This approach aligns well with our modular component architecture, providing cle
 
 Documentation updated in memory-bank/techContext.md.
 
+### 2023-04-04: Event/Object Store and Distributed Architecture
+Decided to use NATS JetStream as both an Event Store and Object Store, providing:
+- Persistent event sourcing for reliable state management
+- Event streaming for component communication
+- Object storage for binary data and shared resources
+- Integration with remote cloud resources
+
+While the system is primarily hyper-converged on a central server, it will also communicate with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
+
+Documentation updated in memory-bank/techContext.md.
+
 ## Time Estimate
-The high-level design, domain pattern definition, and implementation architecture decisions are complete. Detailed specifications will require additional time to develop.
+The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.
 
 ## Dependencies
 None - This is the initial design task.
 
 ## Notes
-This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, and implementation architecture decisions are now complete, but detailed component specifications, interface definitions, and NixOS module design need further development. 
+This is a Level 0 (Initial Design) task that focuses on establishing the foundational architecture and components of the CIM system. The high-level design, domain pattern definition, implementation architecture decisions, and distributed strategy are now complete, but detailed component specifications, interface definitions, NixOS module design, and event schema design need further development. 

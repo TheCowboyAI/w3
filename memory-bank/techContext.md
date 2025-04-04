@@ -2,7 +2,7 @@
 
 ## Technology Stack
 
-The CIM project will be implemented as a hyper-converged solution using NixOS. 
+The CIM project will be implemented as a hyper-converged solution using NixOS, with distributed capabilities through NATS. 
 
 ### Implementation Architecture
 
@@ -14,8 +14,31 @@ The CIM project will be implemented as a hyper-converged solution using NixOS.
   - Container hosting tools
   - NATS server (shared messaging system)
 - **Inventory Management**: The host is tracked as part of an inventory system.
+- **Distributed Architecture**: While hyper-converged locally, the system communicates with remote cloud resources through NATS.
 
 This architecture aligns with our modular component design, with each component potentially deployed as an isolated container while sharing communication infrastructure through NATS.
+
+### NATS JetStream Integration
+
+NATS JetStream will serve dual critical roles in our architecture:
+
+1. **Event Store**:
+   - Persistent event sourcing
+   - Event streaming for component communication
+   - Event replay for system recovery
+   - Distributed event log
+   - Ordered message delivery
+   - Consumer groups for event processing
+
+2. **Object Store**:
+   - Persistent data storage
+   - Binary object storage
+   - Cross-component data sharing
+   - Distributed access to shared resources
+   - Versioned object storage
+   - Metadata management
+
+This approach enables both local and distributed components to share a common event and data infrastructure, enhancing resilience and scalability.
 
 ### Component Deployment Strategy
 
@@ -28,13 +51,48 @@ This architecture aligns with our modular component design, with each component 
 | Storage Manager | nixos-container |
 | User Interface Framework | nixos-container |
 | Integration Hub | nixos-container |
+| NATS JetStream | NixOS service (on host) |
+
+### Distributed Communication Architecture
+
+```
+                          ┌─────────────────┐
+                          │                 │
+                          │  Remote Cloud   │
+                          │   Resources     │
+                          │                 │
+                          └────────┬────────┘
+                                   │
+                                   │ NATS
+                                   │
+┌─────────────────────────────────┴─────────────────────────────────┐
+│                                                                    │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │                     Hyper-converged Host                     │  │
+│  │                                                             │  │
+│  │  ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌────────┐ │  │
+│  │  │Container 1│   │Container 2│   │Container 3│   │   ...  │ │  │
+│  │  └─────┬─────┘   └─────┬─────┘   └─────┬─────┘   └────┬───┘ │  │
+│  │        │               │               │              │     │  │
+│  │        └───────────────┼───────────────┼──────────────┘     │  │
+│  │                        │               │                    │  │
+│  │                        v               v                    │  │
+│  │               ┌──────────────────────────────┐             │  │
+│  │               │     NATS + JetStream         │             │  │
+│  │               │  (Event/Object Store)        │             │  │
+│  │               └──────────────────────────────┘             │  │
+│  │                                                             │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+```
 
 ### Potential Backend Technologies
 - NixOS for system configuration and deployment
-- NATS for messaging and component communication
+- NATS with JetStream for messaging, event sourcing, and object storage
 - Rust for performance-critical components
 - Python for data processing and analysis
-- PostgreSQL or MongoDB for data storage
+- PostgreSQL or MongoDB for relational/document data when needed
 - Redis for caching and real-time features
 
 ### Potential Frontend Technologies
@@ -49,8 +107,8 @@ This architecture aligns with our modular component design, with each component 
 - NixOS for containerization and configuration
 - Container orchestration via NixOS modules
 - CI/CD pipelines for automated testing and deployment
-- Potential cloud deployment with NixOS configurations
-- NATS for internal service communication
+- Cloud resources accessible via NATS
+- NATS JetStream for event sourcing and object storage
 
 ## Development Environment
 
@@ -61,6 +119,7 @@ This architecture aligns with our modular component design, with each component 
 - Code editor (VS Code recommended)
 - NATS client tools for testing
 - Terminal for command-line operations
+- NATS JetStream CLI for event/object store management
 
 ### Development Workflow
 - NixOS configuration management
@@ -69,6 +128,7 @@ This architecture aligns with our modular component design, with each component 
 - Automated testing
 - Continuous integration
 - Reproducible builds via Nix
+- Event-driven development practices
 
 ### Local Setup
 Development will use NixOS or nix-shell for consistent environments across team members. Detailed setup instructions will be provided in a separate document.
@@ -85,12 +145,14 @@ Development will use NixOS or nix-shell for consistent environments across team 
 - API contract testing
 - End-to-end workflows
 - Container integration testing
+- Event stream testing
 
 ### Performance Testing
 - Load testing
 - Scalability testing
 - Bottleneck identification
 - Container resource usage analysis
+- JetStream performance profiling
 
 ## Documentation Approach
 
@@ -99,12 +161,14 @@ Development will use NixOS or nix-shell for consistent environments across team 
 - API documentation
 - Architecture documentation
 - NixOS module documentation
+- Event schema documentation
 
 ### User Documentation
 - User guides
 - API references
 - Tutorials and examples
 - Deployment guides
+- Event/object store usage guides
 
 ## Versioning and Compatibility
 
@@ -118,4 +182,5 @@ Development will use NixOS or nix-shell for consistent environments across team 
 - Backward compatibility within major versions
 - Deprecation notices before removal
 - Migration guides for major upgrades
-- NixOS module compatibility contracts 
+- NixOS module compatibility contracts
+- Event schema versioning 
