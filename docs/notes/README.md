@@ -19,6 +19,7 @@ This directory contains documented design decisions for the CIM project. Each de
 | [011](011-ipld-content-addressable-storage.md) | IPLD Content-Addressable Storage | 2023-04-06 | Defines the implementation of IPLD for content-addressed, immutable object storage with event-object linkage |
 | [012](012-primary-user-interfaces.md) | Primary User Interfaces | 2023-04-06 | Defines the three user interfaces (Native, Web, Mobile) and their chat-centric interaction model |
 | [013](013-security-architecture.md) | Security Architecture | 2023-04-06 | Establishes Root CA, YubiKey integration, and secure authentication framework for CIM |
+| [014](014-component-specifications.md) | Detailed Component Specifications | 2023-04-07 | Provides detailed specifications for the seven core components, including their internal structure, interfaces, and resource requirements |
 
 ## Decision Relationships
 
@@ -100,6 +101,15 @@ This directory contains documented design decisions for the CIM project. Each de
                                                                               │                        │
                                                                               │ 013: Security          │
                                                                               │ Architecture           │
+                                                                              │                        │
+                                                                              └────────────┬───────────┘
+                                                                                           │
+                                                                                           │
+                                                                                           ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 014: Component         │
+                                                                              │ Specifications         │
                                                                               │                        │
                                                                               └────────────────────────┘
 ```
