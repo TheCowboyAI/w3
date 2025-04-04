@@ -22,6 +22,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Distributed event/object store strategy (NATS JetStream)
 - [x] Remote cloud resource integration approach
 - [x] Multi-tier storage strategy design (JetStream → MinIO → Wasabi)
+- [x] Scaling architecture model (Leaf Node → 3-Node Cluster → Wasabi)
 
 ## In Progress
 
@@ -90,12 +91,12 @@ NATS JetStream will serve dual critical roles:
 
 While the system is hyper-converged on a central server, it also communicates with remote cloud resources through NATS, creating a distributed architecture that extends beyond the local system.
 
-We've implemented a robust multi-tier storage strategy:
-1. **Primary Tier (NATS JetStream)** - Real-time storage within the hyper-converged system
-2. **Secondary Tier (MinIO on NAS)** - JetStream files projected to NAS for decentralized distribution
-3. **Tertiary Tier (Wasabi)** - MinIO S3 buckets replicated to Wasabi for long-term storage
+We've implemented a robust multi-tier scaling architecture:
+1. **"Leaf Node"** - Single hyper-converged node for local operations and connections
+2. **3-Node Cluster** - Replica of the leaf node in clustered mode for high availability and compute-intensive tasks
+3. **Wasabi** - Long-term archival storage for durability and disaster recovery
 
-This approach ensures data resilience across multiple storage levels while maintaining performance for active data.
+The scaling path follows: Leaf Node → 3-Node Cluster → Wasabi, allowing us to start with a single node deployment and scale up to a clustered environment when higher availability or processing capacity is required.
 
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md.
 
@@ -132,9 +133,10 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Event sourcing provides robust audit trails and system recovery capabilities
 - Object storage in JetStream enables efficient sharing of binary data
 - Distributed communication through NATS enables cloud resource integration
-- Multi-tier storage strategy (JetStream → MinIO → Wasabi) balances performance, accessibility, and long-term durability
-- Projecting JetStream files to MinIO provides S3-compatible access outside the hyper-converged system
-- Wasabi integration ensures cost-effective long-term storage for archival and disaster recovery
+- Multi-tier architecture (Leaf Node → 3-Node Cluster → Wasabi) balances performance, availability, and durability
+- Leaf Node configuration optimizes local operations while allowing for system growth
+- 3-Node Cluster enables high availability for customer-facing services and handles compute-intensive tasks
+- Scaling from single node to cluster maintains consistent data and processing models
 
 ## Milestone Tracking
 

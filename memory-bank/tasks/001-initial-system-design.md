@@ -88,7 +88,7 @@ Design the initial system architecture and core components for the Composable In
 - [x] Define event store capabilities
 - [x] Establish object storage approach
 - [x] Determine persistence strategies
-- [x] Design multi-tier storage architecture (JetStream → MinIO → Wasabi)
+- [x] Design multi-tier storage architecture (JetStream → Cluster → Wasabi)
 - [ ] Design event schemas
 - [ ] Define event processing patterns
 - [ ] Create object storage access patterns
@@ -97,6 +97,7 @@ Design the initial system architecture and core components for the Composable In
 - [x] Define local vs. remote components approach
 - [x] Establish cloud resource integration strategy
 - [x] Select distributed communication mechanism
+- [x] Define scaling model (Leaf Node → 3-Node Cluster)
 - [ ] Design consistency models
 - [ ] Define fault tolerance approaches
 - [ ] Create distributed security model
@@ -159,16 +160,33 @@ Documentation updated in memory-bank/techContext.md.
 ### 2023-04-05: Multi-Tier Storage Strategy
 Implemented a robust multi-tier storage strategy that extends beyond the hyper-converged system:
 1. **Primary Tier (NATS JetStream)** - Real-time storage within the hyper-converged system
-2. **Secondary Tier (MinIO on NAS)** - JetStream files projected to NAS for decentralized distribution
-3. **Tertiary Tier (Wasabi)** - MinIO S3 buckets replicated to Wasabi for long-term storage
+2. **Secondary Tier (Cluster)** - 3-node replica of the leaf node for high availability and compute-intensive tasks
+3. **Tertiary Tier (Wasabi)** - Long-term archival storage for durability and disaster recovery
 
 This approach provides multiple benefits:
 - Performance optimization for active data in JetStream
-- Decentralized access through S3-compatible MinIO interface
+- High availability through 3-node cluster
 - Long-term durability and disaster recovery with Wasabi
 - Cost-effective storage tiering based on access patterns
 
 Documentation updated in memory-bank/techContext.md with a new architecture diagram.
+
+### 2023-04-05: Scaling Architecture Enhancement
+Defined a comprehensive scaling architecture model:
+1. **"Leaf Node"** - Single hyper-converged node serving as the local system entry point
+   - Complete functionality in a self-contained system
+   - Optimized for local connections and processing
+   - Projects data to cluster tier for high availability
+
+2. **3-Node Cluster** - Replica of the leaf node in clustered configuration
+   - Provides high availability for customer-facing services
+   - Handles compute-intensive tasks offloaded from leaf nodes
+   - Distributes load across multiple nodes
+   - Manages data replication to Wasabi for long-term storage
+
+The scaling path (Leaf Node → 3-Node Cluster → Wasabi) allows for flexible deployment models that can adapt to different operational requirements. Leaf nodes focus on local processing while offloading intensive tasks to the cluster, creating an efficient division of responsibilities.
+
+Documentation updated in memory-bank/techContext.md with enhanced architecture diagram and scaling details.
 
 ## Time Estimate
 The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.

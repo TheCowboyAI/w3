@@ -42,31 +42,59 @@ This approach enables both local and distributed components to share a common ev
 
 ### Multi-Tier Storage Strategy
 
-The system implements a robust multi-tier storage strategy:
+The system implements a robust multi-tier storage strategy that scales from a single "Leaf Node" to a clustered environment:
 
-1. **Primary Tier: NATS JetStream**
+1. **Primary Tier: NATS JetStream on Leaf Node**
    - Real-time event and object storage within the hyper-converged system
    - Provides immediate access for system components
    - Optimized for performance and availability
+   - Serves local connections and operations
 
-2. **Secondary Tier: MinIO on NAS**
-   - NATS JetStream files are projected to a NAS device running MinIO
-   - Provides decentralized distribution outside the hyper-converged system
-   - Enables S3-compatible access to events and objects
-   - Adds geographical redundancy and access flexibility
+2. **Secondary Tier: 3-Node Cluster**
+   - Replica of the leaf node in a clustered configuration
+   - Handles high availability for customer-facing services
+   - Manages compute-intensive tasks offloaded from leaf nodes
+   - Provides additional processing capacity and redundancy
+   - Acts as an intermediary tier between leaf nodes and long-term storage
 
 3. **Tertiary Tier: Wasabi Cloud Storage**
-   - MinIO S3 buckets are replicated to Wasabi
+   - Cluster replicates data to Wasabi
    - Provides long-term archival storage
    - Ensures data durability beyond local infrastructure
    - Cost-effective solution for cold storage and disaster recovery
 
 This multi-tier approach provides:
-- Immediate performance with NATS JetStream
-- Decentralized access with MinIO
+- Immediate performance with local NATS JetStream on leaf nodes
+- High availability and additional compute capacity with the 3-node cluster
 - Long-term durability with Wasabi
 - Protection against various failure scenarios
-- Flexible access patterns for different use cases
+- Flexible scaling from single node to clustered environment
+
+### Scaling Architecture
+
+The system is designed to scale from a single hyper-converged "Leaf Node" to a distributed multi-node architecture:
+
+1. **Leaf Node Configuration**:
+   - Single hyper-converged node for local operations
+   - Complete functionality in a self-contained system
+   - Optimized for local connections and processing
+   - Projects data to cluster tier for redundancy and high availability
+
+2. **Cluster Configuration**:
+   - 3-node replica of the leaf node in clustered mode
+   - Provides high availability for customer-facing services
+   - Handles more compute-intensive tasks
+   - Distributes load across multiple nodes
+   - Ensures system availability during maintenance or failures
+   - Manages replication to Wasabi for long-term storage
+
+3. **Scaling Path**:
+   - Start with single leaf node deployment
+   - Add 3-node cluster when higher availability or processing capacity is required
+   - Connection pattern: Leaf Node → Cluster → Wasabi
+   - Leaf nodes focus on local processing while offloading intensive tasks to cluster
+
+This architecture allows for flexible deployment models that can adapt to different operational requirements while maintaining a consistent data and processing model.
 
 ### Component Deployment Strategy
 
@@ -96,7 +124,7 @@ This multi-tier approach provides:
 ┌─────────────────────────────────┴─────────────────────────────────┐
 │                                                                    │
 │  ┌─────────────────────────────────────────────────────────────┐  │
-│  │                     Hyper-converged Host                     │  │
+│  │                     "Leaf Node" (Hyper-converged Host)       │  │
 │  │                                                             │  │
 │  │  ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌────────┐ │  │
 │  │  │Container 1│   │Container 2│   │Container 3│   │   ...  │ │  │
@@ -114,24 +142,31 @@ This multi-tier approach provides:
 │                              │                                     │
 └──────────────────────────────┼─────────────────────────────────────┘
                                │
-                               │ File Projection
+                               │ Data Replication
                                │
-                        ┌──────┴───────┐
-                        │              │
-                        │   NAS with   │
-                        │    MinIO     │
-                        │              │
-                        └──────┬───────┘
-                               │
-                               │ S3 Replication
-                               │
-                        ┌──────┴───────┐
-                        │              │
-                        │    Wasabi    │
-                        │  Long-term   │
-                        │   Storage    │
-                        │              │
-                        └──────────────┘
+                    ┌──────────┴───────────────┐
+                    │                          │
+                    │     3-Node Cluster       │
+                    │  (High Availability &    │
+                    │   Compute Intensive)     │
+                    │                          │
+                    │  ┌────┐  ┌────┐  ┌────┐  │
+                    │  │Node│  │Node│  │Node│  │
+                    │  │ 1  │  │ 2  │  │ 3  │  │
+                    │  └──┬─┘  └──┬─┘  └──┬─┘  │
+                    │     └───────┼────────┘   │
+                    │             │            │
+                    └─────────────┼────────────┘
+                                  │
+                                  │ Data Archival
+                                  │
+                           ┌──────┴───────┐
+                           │              │
+                           │    Wasabi    │
+                           │  Long-term   │
+                           │   Storage    │
+                           │              │
+                           └──────────────┘
 ```
 
 ### Potential Backend Technologies
