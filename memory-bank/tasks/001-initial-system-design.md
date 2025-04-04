@@ -15,6 +15,8 @@ Design the initial system architecture and core components for the Composable In
 - Determine implementation architecture ✓
 - Define distributed event/object store strategy ✓
 - Establish cloud resource integration approach ✓
+- Define business focus and target audience ✓
+- Establish domain-driven design approach for vertical markets ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -26,6 +28,10 @@ Design the initial system architecture and core components for the Composable In
 - Implementation architecture documentation ✓
 - Event/object store strategy documentation ✓
 - Distributed architecture documentation ✓
+- Business focus documentation ✓
+- Domain-driven design approach documentation ✓
+- Common domain object definitions (in progress)
+- Vertical market domain object examples (in progress)
 
 ## Task Details
 
@@ -73,6 +79,23 @@ Design the initial system architecture and core components for the Composable In
 - [x] Information lifecycle patterns
 - [x] Context management patterns
 - [x] Adaptation patterns
+
+### Business Focus and Audience
+- [x] Define target audience (medium-sized businesses)
+- [x] Establish vertical market focus
+- [x] Document hybrid cloud approach
+- [x] Outline progressive scaling strategy
+- [x] Create value proposition
+
+### Domain-Driven Design
+- [x] Establish domain-driven approach
+- [x] Define domain boundary principles
+- [x] Document common vs. vertical domain balance
+- [x] Outline domain composition methodology
+- [ ] Define common domain objects (People, Organizations, Locations, Documents, Inventory)
+- [ ] Create vertical market domain examples
+- [ ] Design cross-domain interaction patterns
+- [ ] Document domain event flows
 
 ### Implementation Architecture
 - [x] Select base technology platform (NixOS)
@@ -187,6 +210,26 @@ Defined a comprehensive scaling architecture model:
 The scaling path (Leaf Node → 3-Node Cluster → Wasabi) allows for flexible deployment models that can adapt to different operational requirements. Leaf nodes focus on local processing while offloading intensive tasks to the cluster, creating an efficient division of responsibilities.
 
 Documentation updated in memory-bank/techContext.md with enhanced architecture diagram and scaling details.
+
+### 2023-04-05: Business Focus and Domain-Driven Design
+Established two key architectural principles:
+
+1. **Business Focus on Medium-Sized Businesses in Vertical Markets**
+   - Defined target audience as medium-sized businesses needing specialized workflows
+   - Established hybrid cloud approach with internal critical data
+   - Outlined progressive scaling from single leaf node to cluster
+   - Created value proposition focusing on independence and specialized solutions
+
+2. **Domain-Driven Design for Vertical Markets**
+   - Established domain-driven approach with clear domain boundaries
+   - Balanced vertical market specialization with common functionality
+   - Defined composition model for combining domains
+   - Identified common business domains applicable across industries
+   - Outlined vertical market domains for specialized industry segments
+
+These principles will guide our implementation approach, ensuring the system addresses specific vertical market needs while leveraging common business functionality. The domain-driven approach aligns well with our event sourcing strategy, as each domain can maintain its own event streams.
+
+Documentation added as design decisions in docs/notes/ and reflected in productContext.md.
 
 ## Time Estimate
 The high-level design, domain pattern definition, implementation architecture decisions, and distributed event/object store strategy are complete. Detailed specifications will require additional time to develop.

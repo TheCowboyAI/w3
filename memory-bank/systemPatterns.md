@@ -98,4 +98,61 @@ The system will evolve through:
 - Incremental enhancement
 - Backward compatibility
 - Feature toggling
-- Migration pathways 
+- Migration pathways
+
+## Domain-Driven Design Patterns
+
+The CIM system follows a domain-driven design approach that enables specialization for vertical markets while maintaining a common foundation of functionality.
+
+### Domain Boundary Patterns
+
+1. **Clear Domain Separation**: Each domain is a self-contained unit with well-defined boundaries.
+   - Maintains its own events, commands, and queries
+   - Has independent data models and business logic
+   - Communicates with other domains through explicit interfaces
+
+2. **Common vs. Vertical Domains**: The system differentiates between two types of domains:
+   - **Common Business Domains**: Foundational domains applicable across industries (People, Organizations, Documents, etc.)
+   - **Vertical Market Domains**: Specialized domains for specific industry segments (Healthcare, Manufacturing, etc.)
+
+3. **Domain Composition Model**: Enables combining domains to create specialized solutions
+   - Composition through event streams
+   - Domain interoperation via explicit interfaces
+   - Configuration-based domain activation and deactivation
+
+### Core Domain Patterns
+
+1. **Event-Centric Domain Model**: Domains are primarily defined by their events
+   - Events represent business facts that have occurred
+   - Event schema defines the domain language
+   - Commands and queries build upon event foundations
+
+2. **Domain State Projection**: Domain state is derived from event streams
+   - Read models built from event projections
+   - Materialized views optimized for query patterns
+   - Domain-specific access patterns for state retrieval
+
+3. **Cross-Domain Communication**:
+   - Event-based communication for loose coupling
+   - Domain services for direct communication when necessary
+   - Integration events for cross-domain coordination
+
+### Domain Implementation Guidelines
+
+1. **Domain Package Structure**: Each domain is organized as a coherent package
+   - `domain/[domain-name]/events` - Event definitions
+   - `domain/[domain-name]/commands` - Command handlers
+   - `domain/[domain-name]/queries` - Query handlers
+   - `domain/[domain-name]/projections` - State projections
+   - `domain/[domain-name]/services` - Domain services
+
+2. **Domain Event Naming**: Events follow a consistent naming pattern
+   - Past-tense verb followed by entity name
+   - Specific enough to convey business meaning
+   - Example: `PersonCreated`, `DocumentUploaded`, `InventoryAdjusted`
+
+3. **Domain Object Principles**:
+   - Strong enforcement of invariants
+   - Rich domain models with behavior
+   - Immutable where possible, especially for events
+   - Clear validation rules at domain boundaries 
