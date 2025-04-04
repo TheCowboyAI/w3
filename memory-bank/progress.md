@@ -2,7 +2,7 @@
 
 ## Current Status: Initial Design Phase
 
-The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system, established cross-domain interaction patterns, created standardized domain event flow patterns, and implemented IPLD for content-addressable storage. We are now working on detailed component specifications and interface definitions.
+The CIM project is currently in the initial design phase. We have completed the high-level system architecture design, domain pattern definition, and determined the implementation architecture using NixOS with containers and NATS JetStream for event/object storage. We have defined the base CIM services that will constitute the system, established cross-domain interaction patterns, created standardized domain event flow patterns, and implemented IPLD for content-addressable storage. We have designed the primary user interfaces across multiple platforms. We are now working on detailed component specifications and interface definitions.
 
 ## Completed Items
 
@@ -33,6 +33,7 @@ The CIM project is currently in the initial design phase. We have completed the 
 - [x] Cross-domain interaction patterns definition
 - [x] Domain event flow patterns definition
 - [x] IPLD content-addressable storage implementation
+- [x] Primary user interfaces design and interaction model
 
 ## In Progress
 
@@ -201,6 +202,19 @@ For our Object Store, we've implemented IPLD (InterPlanetary Linked Data) as the
 
 This IPLD implementation provides strong data integrity guarantees, built-in verification, natural deduplication, and a comprehensive audit trail. It aligns our storage architecture with modern distributed systems principles and enables efficient handling of complex data structures.
 
+For user interaction, we've established three primary user interfaces with a common interaction model:
+
+1. **Native Interface** - Rust application using Iced UI framework for desktop environments
+2. **Web Interface** - Rust application targeting WebAssembly using Leptos for browser access
+3. **Mobile Interface** - Native Android and iOS applications for mobile devices
+
+All interfaces follow a consistent interaction model centered around:
+- **Chat-Centric Interface** - Primary interaction through a chat interface with the AI agent
+- **Information Windows** - Additional windows/panels for displaying detailed information
+- **Context Menus** - Context-appropriate menus for actions on different elements
+
+The interfaces communicate with the backend through NATS messaging, with system requests via standardized subjects and a separate command channel for container control. This AI agent-driven approach provides a consistent, intelligent interaction experience across all platforms while optimizing for each platform's specific capabilities.
+
 For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.md, and memory-bank/techContext.md, as well as the design decision documentation in docs/notes/.
 
 ## Known Issues and Challenges
@@ -244,6 +258,12 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - [ ] Implementing efficient IPLD libraries for our storage backends
 - [ ] Balancing immutability with storage efficiency
 - [ ] Designing effective object versioning strategies
+- [ ] Ensuring consistent user experience across different interface platforms
+- [ ] Managing window/panel presentation across diverse screen sizes
+- [ ] Optimizing chat-based interactions for complex operations
+- [ ] Implementing consistent context menus across platforms
+- [ ] Developing efficient NATS communication for mobile environments
+- [ ] Balancing native capabilities with consistent cross-platform experience
 
 ## Learnings and Insights
 
@@ -301,12 +321,20 @@ For full details, see memory-bank/system_design.md, memory-bank/domainPatterns.m
 - Content-based deduplication emerges naturally from CID-based storage
 - Event-object linkage creates a comprehensive audit trail
 - IPLD aligns with modern distributed systems principles
+- Chat-centric interfaces simplify user interaction while leveraging AI capabilities
+- Contextual information windows provide organized data presentation
+- Rust provides performance and safety benefits across different platforms
+- WebAssembly enables high-performance web applications with near-native capabilities
+- Consistent interaction models improve user experience across devices
+- NATS provides a reliable communication backbone for all user interfaces
+- AI-driven interaction reduces UI complexity and improves user experience
+- Context menus balance simplicity with powerful functionality
 
 ## Milestone Tracking
 
 ### Milestone 1: Initial Design (Current)
-- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, cross-domain interaction patterns, domain event flow patterns, and IPLD content-addressable storage approach
-- Status: High-level design, domain patterns, implementation architecture, base services definition, cross-domain interaction patterns, domain event flow patterns, and IPLD content-addressable storage approach complete; detailed design in progress
+- Target: Define system architecture, core components, domain patterns, implementation approach, base CIM services, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, and primary user interfaces
+- Status: High-level design, domain patterns, implementation architecture, base services definition, cross-domain interaction patterns, domain event flow patterns, IPLD content-addressable storage approach, and primary user interfaces design complete; detailed design in progress
 - ETA: TBD
 
 ### Milestone 2: Proof of Concept

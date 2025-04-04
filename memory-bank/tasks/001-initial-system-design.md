@@ -23,6 +23,7 @@ Design the initial system architecture and core components for the Composable In
 - Define cross-domain interaction patterns ✓
 - Define domain event flow patterns ✓
 - Define content-addressable storage approach using IPLD ✓
+- Define primary user interfaces and interaction model ✓
 
 ## Deliverables
 - System architecture diagram ✓
@@ -44,6 +45,7 @@ Design the initial system architecture and core components for the Composable In
 - Cross-domain interaction patterns documentation ✓
 - Domain event flow patterns documentation ✓
 - IPLD content-addressable storage documentation ✓
+- Primary user interfaces documentation ✓
 
 ## Task Details
 
@@ -222,8 +224,31 @@ This approach provides strong guarantees for data integrity, enables natural ded
 
 Documentation added as a design decision in docs/notes/011-ipld-content-addressable-storage.md.
 
+### 2023-04-06: Primary User Interfaces
+Established the three primary user interfaces and their common interaction model:
+
+1. **Native Interface**: A Rust application using the Iced UI framework, running natively on local systems and optimized for desktop environments
+
+2. **Web Interface**: A Rust application targeting WebAssembly using Leptos, accessible through web browsers and providing cross-platform compatibility
+
+3. **Mobile Interface**: Native implementations for Android and iOS platforms, optimized for touch interaction and mobile form factors
+
+All interfaces follow a consistent interaction model:
+- **Chat-Centric Interface**: Primary interaction through chat with the AI agent
+- **Information Windows**: Additional windows/panels for displaying detailed information
+- **Context Menus**: Context-appropriate menus for actions on different elements
+
+The interfaces communicate with the backend through NATS messaging, with:
+- System requests via standardized NATS subjects
+- A separate command channel for container control
+- AI agent-driven interaction, where the agent interprets user intent and orchestrates backend services
+
+This approach provides a consistent experience across all platforms while optimizing for each platform's specific capabilities. The chat-centric model simplifies the user interface while leveraging the power of our AI-driven backend, and the information windows provide contextual organization of data when needed.
+
+Documentation added as a design decision in docs/notes/012-primary-user-interfaces.md.
+
 ## Time Estimate
-The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, cross-domain interaction patterns, domain event flow patterns, and content-addressable storage approach are complete. We're now focused on detailed component specifications and interface definitions.
+The high-level design, domain pattern definition, implementation architecture decisions, distributed event/object store strategy, base CIM services definition, cross-domain interaction patterns, domain event flow patterns, content-addressable storage approach, and primary user interfaces are complete. We're now focused on detailed component specifications and interface definitions.
 
 ## Dependencies
 None - This is the initial design task.

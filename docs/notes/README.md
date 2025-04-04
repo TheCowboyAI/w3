@@ -17,6 +17,7 @@ This directory contains documented design decisions for the CIM project. Each de
 | [009](009-cross-domain-interaction-patterns.md) | Cross-Domain Interaction Patterns | 2023-04-06 | Defines the patterns for communication and data sharing between domains while maintaining domain boundaries |
 | [010](010-domain-event-flow-patterns.md) | Domain Event Flow Patterns | 2023-04-06 | Establishes standardized event structures, flows, and versioning strategies for domain events across the system |
 | [011](011-ipld-content-addressable-storage.md) | IPLD Content-Addressable Storage | 2023-04-06 | Defines the implementation of IPLD for content-addressed, immutable object storage with event-object linkage |
+| [012](012-primary-user-interfaces.md) | Primary User Interfaces | 2023-04-06 | Defines the three user interfaces (Native, Web, Mobile) and their chat-centric interaction model |
 
 ## Decision Relationships
 
@@ -80,6 +81,15 @@ This directory contains documented design decisions for the CIM project. Each de
                                                                               │                        │
                                                                               │ 011: IPLD Content-     │
                                                                               │ Addressable Storage    │
+                                                                              │                        │
+                                                                              └────────────┬───────────┘
+                                                                                           │
+                                                                                           │
+                                                                                           ▼
+                                                                              ┌────────────────────────┐
+                                                                              │                        │
+                                                                              │ 012: Primary User      │
+                                                                              │ Interfaces             │
                                                                               │                        │
                                                                               └────────────────────────┘
 ```

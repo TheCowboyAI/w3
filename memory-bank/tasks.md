@@ -5,7 +5,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
 ## Active Tasks
 
 ### [001 - Initial System Design](tasks/001-initial-system-design.md)
-- **Status**: In Progress (99% complete)
+- **Status**: In Progress (99.5% complete)
 - **Priority**: High
 - **Description**: Design the initial architecture of the CIM system
 - **Progress**:
@@ -23,6 +23,7 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - ✓ Cross-domain interaction patterns defined
   - ✓ Domain event flow patterns defined
   - ✓ IPLD content-addressable storage approach defined
+  - ✓ Primary user interfaces and interaction model defined
   - ⏳ Detailed component specifications
   - ⏳ Interface definitions
   - ⏳ NixOS module design
@@ -125,6 +126,28 @@ This document serves as a reference to all tasks, pointing to individual task fi
   - Build test suite for data integrity verification
   - Create monitoring for object store metrics
 
+### 011 - User Interface Implementation
+- **Status**: Planned
+- **Priority**: High
+- **Description**: Implement the three primary user interfaces (Native, Web, Mobile) with a common interaction model
+- **Dependencies**: 001 - Initial System Design, 003 - NATS JetStream Configuration
+- **Subtasks**:
+  - Develop core interaction library in Rust
+  - Implement Native UI using Iced framework
+  - Create Web UI using Leptos and WebAssembly
+  - Design prototype for Mobile UI
+  - Establish NATS communication layer for all interfaces
+  - Implement chat-centric interaction model
+  - Create information window management system
+  - Design and implement context menus
+  - Develop unified styling and UI components
+  - Create AI agent integration for UI interaction
+  - Implement container command channel
+  - Design responsive layouts for different screen sizes
+  - Create accessibility features
+  - Implement consistent navigation patterns
+  - Develop documentation and user guides
+
 ## Completed Tasks
 
 *None yet*
@@ -137,6 +160,8 @@ This document serves as a reference to all tasks, pointing to individual task fi
 - Services will expose dual interfaces: NATS for system components and MCP for AI integration
 - Vendor-provided MCP interfaces will be preferred for third-party tools where available
 - IPLD will provide content-addressed, immutable storage for objects with event linkage
+- User interfaces will follow a chat-centric interaction model with contextual information windows
+- Rust will be used across all platforms to maximize code sharing and performance
 
 ## Task Legend
 
