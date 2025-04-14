@@ -2,6 +2,8 @@
 
 This document guides the creation of a Composable Information Machine (CIM) Leaf Node - a NixOS-based system that:
 
+Is on a remote machine accessible via ssh and pxe boot
+
 1. Tracks and manages its own hardware as configurable inputs/outputs
 2. Uses NixOS for deterministic hardware configuration
 3. Uses Facter to gather remote hardware facts
@@ -10,6 +12,7 @@ This document guides the creation of a Composable Information Machine (CIM) Leaf
 6. Uses NATS Jetstream for communication between components
 7. Uses Object Store and Event Store for Domain Events
 8. Scales by communicating with other Domain nats servers
+9. Keeps Inventory of itself in published Events
 
 ## 📋 Project Initialization Steps
 
@@ -33,6 +36,7 @@ cim-leaf/
 │   ├── packages.nix
 │   ├── gui.nix
 │   ├── services.nix
+│   ├── topology.nix
 │   ├── containers.nix
 │   └── networking.nix
 ├── containers/
@@ -57,7 +61,7 @@ cim-leaf/
 
 1. Create a flake.nix with:
    - NixOS modules for hardware detection and management
-   - nix-topology, nixos-facter, nixos-anywhere, extra-container, nix-inspect, disko
+   - nix-topology, nixos-facter, nixos-anywhere, extra-container, nix-direnv, nix-inspect, disko
    - nixos-container management
    - NATS integration
    - Developer Shell
@@ -66,13 +70,19 @@ cim-leaf/
    - Scan and catalog available hardware on remote system
    - Generate hardware configuration
    - Store hardware state persistently
-   - Provide interfaces for hardware reconfiguration
+   - Provide interfaces for hardware inspection and reconfiguration
 
 3. Implement container infrastructure:
    - Define container management API
    - use nixos-containers
    - Ensure container networking is isolated and secure using only nats as a connector
    - Setup resource limits and monitoring
+
+4. Graphic User Interface
+   - Wayland/Hyprland with selected plugins and add ons
+   - Boots to Kiosk showing (NOC) Network Operations Center
+     - shows current hardware sensors
+     - shows all containers with status 
 
 ### Step 3: Communication Layer
 
@@ -130,8 +140,9 @@ cim-leaf/
 
 1. Use NATS JetStream for message persistence
 2. Implement message versioning
-3. Define schemas for all message types
+3. Define schemas for all message types (Cmd/Qry/Evt)
 4. Use subject hierarchies for routing
+5. Use permissions and policies to route authorization
 
 ### Container Management
 
@@ -140,10 +151,20 @@ cim-leaf/
 3. Provide automatic DNS resolution for containers
 4. Support for container migration
 
+## Software Tooling
+
+1. Cursor IDE
+2. Rust Prefered
+3. ALWAYS NixOS
+4. git, cargo, iced ui, leptos for web, nats for ALL communication
+5. DDD, BDD, TDD, EDA, CQRS
+
 ## 🧪 Testing Strategy
 
 1. Hardware detection tests with varied hardware profiles
+   - Intent is to probe for the ability to configure hardware and install via nixos-anywhere
 2. Communication reliability tests with network partition simulation
+   - Intent is to set up a data channel and a separate command/control channel
 3. Container lifecycle tests with rapid creation/destruction
 4. System recovery tests simulating hardware failures
 5. Acceptance Tests for expected features
@@ -151,10 +172,11 @@ cim-leaf/
 ## 📚 Documentation Requirements
 
 1. System architecture overview
-2. Hardware compatibility list
-3. Container management API documentation
-4. Message format specifications
-5. Troubleshooting guides
+2. Hardware list with ServiceTag/AssetTag
+3. Hardware Graph of items and enabled capability
+4. Container management API documentation
+5. Message format specifications
+6. Troubleshooting guides
 
 ## 🔄 Iteration Plan
 
