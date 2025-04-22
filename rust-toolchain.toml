@@ -1,0 +1,4 @@
+[toolchain]
+channel = "stable"
+components = ["cargo", "cargo-generate","rust-src", "rustfmt", "clippy"]
+targets = ["wasm32-unknown-unknown"] 
