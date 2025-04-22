@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Radiant glow effect -->
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#FF8C00" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FF4500" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Shadow filter for floating effect -->
+    <filter id="floatingShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
+      <feFlood flood-color="rgba(0,0,0,0.3)" result="shadowColor"/>
+      <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadowBlur"/>
+      <feBlend in="SourceGraphic" in2="shadowBlur" mode="normal"/>
+    </filter>
+    
+    <!-- Subtle animation for floating effect -->
+    <animate id="floatAnimation" 
+             attributeName="transform" 
+             attributeType="XML" 
+             type="translate" 
+             values="0,0; 0,-5; 0,0" 
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </defs>
+  
+  <!-- Background glow -->
+  <circle cx="150" cy="150" r="120" fill="url(#glowGradient)"/>
+  
+  <!-- Include your existing logo here with the floating effect -->
+  <g transform="translate(75, 75)" filter="url(#floatingShadow)">
+    <!-- This is a placeholder for the actual logo content -->
+    <!-- You would insert your actual logo SVG content here -->
+    <path d="M75,0 L100,50 L150,60 L100,100 L110,150 L75,120 L40,150 L50,100 L0,60 L50,50 Z" 
+          fill="#FFD700" 
+          stroke="#8B4513" 
+          stroke-width="2"/>
+    
+    <!-- Add a cowboy hat to the star -->
+    <path d="M65,55 C65,45 70,35 75,35 C80,35 85,45 85,55 C85,58 84,60 83,62 
+             C82,65 79,67 75,67 C71,67 68,65 67,62 C66,60 65,58 65,55 Z" 
+          fill="#8B4513" 
+          stroke="#703F00" 
+          stroke-width="1"/>
+          
+    <!-- Hat brim -->
+    <path d="M55,60 C60,65 70,70 75,70 C80,70 90,65 95,60 C97,58 98,57 98,55 C98,54 97,53 96,53 
+             C85,50 65,50 54,53 C53,53 52,54 52,55 C52,57 53,58 55,60 Z" 
+          fill="#8B4513" 
+          stroke="#703F00" 
+          stroke-width="1"/>
+  </g>
+  
+  <!-- Apply floating animation to the logo -->
+  <animateTransform 
+    xlink:href="#logo"
+    attributeName="transform" 
+    attributeType="XML" 
+    type="translate" 
+    values="0,0; 0,-5; 0,0" 
+    dur="3s" 
+    repeatCount="indefinite"/>
+</svg> 

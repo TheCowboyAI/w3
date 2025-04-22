@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gold gradient for the badge -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700" />
+      <stop offset="50%" stop-color="#FFC427" />
+      <stop offset="100%" stop-color="#D4AF37" />
+    </linearGradient>
+    
+    <!-- Shine effect -->
+    <linearGradient id="shineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.8)" />
+      <stop offset="50%" stop-color="rgba(255,255,255,0)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </linearGradient>
+    
+    <!-- Shadow effect -->
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="rgba(0,0,0,0.3)" />
+    </filter>
+  </defs>
+  
+  <!-- Main star shape - 5 pointed star -->
+  <path d="M100,20 L112,68 L162,68 L122,98 L142,150 L100,120 L58,150 L78,98 L38,68 L88,68 Z" 
+        fill="url(#goldGradient)" 
+        stroke="#B8860B" 
+        stroke-width="2"
+        filter="url(#badgeShadow)" />
+  
+  <!-- Inner circle -->
+  <circle cx="100" cy="100" r="30" 
+          fill="#D4AF37" 
+          stroke="#B8860B" 
+          stroke-width="1.5" />
+  
+  <!-- Embossed text "SHERIFF" - simplified version -->
+  <path d="M85,90 Q100,80 115,90 Q100,100 85,90 Z" fill="#B8860B" /> <!-- Represents the letter shape -->
+  <path d="M90,110 L110,110 M90,110 Q85,100 110,110" fill="none" stroke="#B8860B" stroke-width="2" stroke-linecap="round" /> <!-- Stylized text representation -->
+  
+  <!-- Decorative dots around inner circle -->
+  <circle cx="100" cy="70" r="2" fill="#B8860B" />
+  <circle cx="100" cy="130" r="2" fill="#B8860B" />
+  <circle cx="70" cy="100" r="2" fill="#B8860B" />
+  <circle cx="130" cy="100" r="2" fill="#B8860B" />
+  <circle cx="78" cy="78" r="2" fill="#B8860B" />
+  <circle cx="122" cy="78" r="2" fill="#B8860B" />
+  <circle cx="78" cy="122" r="2" fill="#B8860B" />
+  <circle cx="122" cy="122" r="2" fill="#B8860B" />
+  
+  <!-- Shine effect overlay -->
+  <path d="M60,60 L140,140" stroke="url(#shineGradient)" stroke-width="15" stroke-linecap="round" opacity="0.5" />
+  
+  <!-- Small decorative stars around the badge edge -->
+  <path d="M100,15 L102,10 L104,15 L109,16 L104,18 L102,23 L100,18 L95,16 Z" fill="#FFD700" />
+  <path d="M15,100 L17,95 L19,100 L24,101 L19,103 L17,108 L15,103 L10,101 Z" fill="#FFD700" />
+  <path d="M185,100 L187,95 L189,100 L194,101 L189,103 L187,108 L185,103 L180,101 Z" fill="#FFD700" />
+  <path d="M100,185 L102,180 L104,185 L109,186 L104,188 L102,193 L100,188 L95,186 Z" fill="#FFD700" />
+</svg> 

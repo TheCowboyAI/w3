@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ropeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5A2B" />
+      <stop offset="50%" stop-color="#A67C52" />
+      <stop offset="100%" stop-color="#8B5A2B" />
+    </linearGradient>
+    
+    <filter id="ropeTexture" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/>
+    </filter>
+  </defs>
+  
+  <!-- Lasso loop -->
+  <ellipse cx="85" cy="70" rx="45" ry="40" fill="none" stroke="url(#ropeGradient)" stroke-width="6" 
+           stroke-linecap="round" filter="url(#ropeTexture)" />
+  
+  <!-- Lasso rope end 1 - connecting to loop -->
+  <path d="M40,70 C30,90 40,110 60,120" fill="none" stroke="url(#ropeGradient)" stroke-width="6" 
+        stroke-linecap="round" filter="url(#ropeTexture)" />
+  
+  <!-- Lasso rope main body -->
+  <path d="M60,120 C80,130 110,125 130,140 C150,155 155,170 140,180" fill="none" stroke="url(#ropeGradient)" 
+        stroke-width="6" stroke-linecap="round" filter="url(#ropeTexture)" />
+  
+  <!-- Lasso rope end 2 - loose end with some coils -->
+  <path d="M140,180 C130,185 125,175 135,170 C145,165 140,155 130,160" fill="none" stroke="url(#ropeGradient)" 
+        stroke-width="6" stroke-linecap="round" filter="url(#ropeTexture)" />
+  
+  <!-- Rope texture details -->
+  <path d="M85,30 C100,25 115,30 130,30" fill="none" stroke="#A67C52" stroke-width="1" stroke-dasharray="2,4" opacity="0.6" />
+  <path d="M85,110 C100,115 115,110 130,110" fill="none" stroke="#A67C52" stroke-width="1" stroke-dasharray="2,4" opacity="0.6" />
+  <path d="M45,70 C40,85 45,100 60,110" fill="none" stroke="#A67C52" stroke-width="1" stroke-dasharray="2,4" opacity="0.6" />
+  
+  <!-- Subtle shadow for depth -->
+  <ellipse cx="85" cy="75" rx="45" ry="5" fill="rgba(0,0,0,0.1)" filter="url(#shadow)" />
+</svg> 

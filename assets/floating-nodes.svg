@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    
+    <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4CD9FF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FF1CFF" stop-opacity="0.9"/>
+    </linearGradient>
+    
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Connection lines -->
+  <g stroke-width="0.75" opacity="0.7" stroke-dasharray="1,2">
+    <line x1="40" y1="60" x2="90" y2="30" stroke="url(#connectionGradient)"/>
+    <line x1="90" y1="30" x2="150" y2="50" stroke="url(#connectionGradient)"/>
+    <line x1="150" y1="50" x2="120" y2="100" stroke="url(#connectionGradient)"/>
+    <line x1="120" y1="100" x2="40" y2="60" stroke="url(#connectionGradient)"/>
+    <line x1="40" y1="60" x2="70" y2="120" stroke="url(#connectionGradient)"/>
+    <line x1="70" y1="120" x2="120" y2="100" stroke="url(#connectionGradient)"/>
+    <line x1="90" y1="30" x2="70" y2="120" stroke="url(#connectionGradient)"/>
+  </g>
+  
+  <!-- Nodes -->
+  <g filter="url(#glow)">
+    <!-- Node with animation -->
+    <circle cx="40" cy="60" r="6" fill="#4CD9FF">
+      <animate attributeName="r" values="5;6;5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Node with animation -->
+    <circle cx="90" cy="30" r="8" fill="#97EBFF">
+      <animate attributeName="r" values="7;8;7" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Node with animation -->
+    <circle cx="150" cy="50" r="7" fill="#FF1CFF">
+      <animate attributeName="r" values="6;7;6" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Node with animation -->
+    <circle cx="120" cy="100" r="6" fill="#FFA1FF">
+      <animate attributeName="r" values="5;6;5" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Node with animation -->
+    <circle cx="70" cy="120" r="5" fill="#4CD9FF">
+      <animate attributeName="r" values="4;5;4" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Node glows -->
+  <g opacity="0.6">
+    <circle cx="40" cy="60" r="10" fill="url(#nodeGlow)"/>
+    <circle cx="90" cy="30" r="14" fill="url(#nodeGlow)"/>
+    <circle cx="150" cy="50" r="12" fill="url(#nodeGlow)"/>
+    <circle cx="120" cy="100" r="10" fill="url(#nodeGlow)"/>
+    <circle cx="70" cy="120" r="9" fill="url(#nodeGlow)"/>
+  </g>
+  
+  <!-- Small particle effects -->
+  <g fill="white" opacity="0.8">
+    <circle cx="65" cy="45" r="1">
+      <animate attributeName="cy" values="45;48;45" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="120" cy="75" r="0.8">
+      <animate attributeName="cx" values="120;122;120" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="55" cy="90" r="0.7">
+      <animate attributeName="r" values="0.7;1;0.7" dur="5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg> 
