@@ -29,7 +29,6 @@
           nodePackages.tailwindcss
           nodePackages.postcss
           nodePackages.autoprefixer
-          nodePackages.postcss-cli
         ];
 
       in
