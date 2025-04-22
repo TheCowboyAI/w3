@@ -1,0 +1,23 @@
+# Generated files
+/target/
+/dist/
+/pkg/
+/styles/output.css
+
+# Nix
+result
+.direnv
+
+# Node modules
+node_modules/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db 

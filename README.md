@@ -2,8 +2,6 @@
 
 A modern web application featuring the Crystalline Neon design system - a futuristic, minimalist aesthetic with purposeful animations and clean interfaces.
 
-![W3 Project](https://example.com/screenshot.png)
-
 ## Overview
 
 W3 is a web-based application that showcases a sophisticated design system while providing an intuitive, engaging user experience. The project implements a cohesive visual language across all components with crystal clarity, neon accents, responsive fluidity, and systematic consistency.
