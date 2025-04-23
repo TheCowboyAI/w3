@@ -1,0 +1,263 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base16 Theme CSS Variables */
+:root {
+  /* Base colors - Light Theme */
+  --base00: #FDFEFF; /* Crystalline - Default Background */
+  --base01: #F6FAFB; /* Lighter Background (status bars) */
+  --base02: rgba(0, 156, 255, 0.2); /* Selection Background */
+  --base03: #4A5A6A; /* Comments, Line Highlighting */
+  --base04: #B0B0B0; /* Chrome - Dark Foreground */
+  --base05: #0A0A0A; /* Onyx - Default Foreground */
+  --base06: #1A2633; /* Deep Steel - Light Foreground */
+  --base07: #FFFFFF; /* Light Background */
+  --base08: #FF5252; /* Error - Red */
+  --base09: #FFB74D; /* Warning - Orange */
+  --base0A: #FFD740; /* Yellow */
+  --base0B: #00E1FF; /* Aqua Edge - Success - Green */
+  --base0C: #B0F6FF; /* Chrome Reflection - Cyan */
+  --base0D: #009CFF; /* Neon Blue - Blue */
+  --base0E: #6C63FF; /* Neon Violet - Purple */
+  --base0F: #002D60; /* Sapphire - Brown */
+
+  /* Semantic mappings from Base16 */
+  --color-background: var(--base00);
+  --color-surface: var(--base01);
+  --color-surface-elevated: var(--base07);
+  --color-selection: var(--base02);
+  --color-text-muted: var(--base03);
+  --color-border: var(--base04);
+  --color-text-primary: var(--base05);
+  --color-text-secondary: var(--base0F);
+  --color-error: var(--base08);
+  --color-warning: var(--base09);
+  --color-success: var(--base0B);
+  --color-info: var(--base0C);
+  --color-accent: var(--base0D);
+  --color-accent-hover: var(--base0E);
+  --color-glow: var(--base0D);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  /* Base colors */
+  --base00: #0A1220; /* Deep Background */
+  --base01: #121A28; /* Lighter Background */
+  --base02: rgba(0, 176, 255, 0.3); /* Selection Background */
+  --base03: #4A5A6A; /* Comments, Line Highlighting */
+  --base04: #B0B0B0; /* Chrome - Dark Foreground */
+  --base05: #FDFEFF; /* Crystalline - Default Foreground */
+  --base06: #F6FAFB; /* Light Foreground */
+  --base07: #002D60; /* Sapphire - Light Background */
+  --base08: #FF5252; /* Error - Red */
+  --base09: #FFB74D; /* Warning - Orange */
+  --base0A: #FFD740; /* Yellow */
+  --base0B: #00E1FF; /* Aqua Edge - Success - Green */
+  --base0C: #B0F6FF; /* Chrome Reflection - Cyan */
+  --base0D: #009CFF; /* Neon Blue - Blue */
+  --base0E: #6C63FF; /* Neon Violet - Purple */
+  --base0F: #00B0FF; /* Steel Blue - Brown */
+
+  /* Semantic mappings from Base16 */
+  --color-background: var(--base00);
+  --color-surface: var(--base01);
+  --color-surface-elevated: var(--base07);
+  --color-selection: var(--base02);
+  --color-text-muted: var(--base04);
+  --color-border: var(--base03);
+  --color-text-primary: var(--base05);
+  --color-text-secondary: var(--base0C);
+  --color-error: var(--base08);
+  --color-warning: var(--base09);
+  --color-success: var(--base0B);
+  --color-info: var(--base0C);
+  --color-accent: var(--base0D);
+  --color-accent-hover: var(--base0F);
+  --color-glow: var(--base0D);
+}
+
+/* Component Styles using @apply */
+@layer components {
+  /* Button styles */
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-base05 shadow-[0_0_8px_2px_theme(colors.glow)] hover:shadow-lg hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply btn border border-border hover:bg-gradient-to-r hover:from-base00 hover:to-base04/40;
+  }
+
+  /* Card styles */
+  .glass-card {
+    @apply bg-surface/30 backdrop-blur-md shadow-xl border border-border rounded-lg p-6 transition-all duration-300;
+  }
+
+  .glass-card-connected {
+    @apply glass-card border-l-4 border-l-accent;
+  }
+
+  /* Input Field Component */
+  .input {
+    @apply bg-surface-elevated dark:bg-surface border border-border text-text-primary focus:border-accent focus:ring-1 focus:ring-accent px-4 py-2 rounded transition-all duration-200;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px 2px rgba(0, 156, 255, 0.6); }
+  50% { box-shadow: 0 0 15px 5px rgba(0, 156, 255, 0.8); }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Font definitions */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/orbitron/v25/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6BoWg1.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://fonts.gstatic.com/s/orbitron/v25/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyKS6BoWg1.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://fonts.gstatic.com/s/orbitron/v25/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1ny_S-BoWg1.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 900;
+  src: url('https://fonts.gstatic.com/s/orbitron/v25/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nysS-BoWg1.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300;
+  src: url('https://fonts.gstatic.com/s/outfit/v6/QGYvz_MVcBeNP4NJuktqWow.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/outfit/v6/QGYvz_MVcBeNP4NJuktqWow.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://fonts.gstatic.com/s/outfit/v6/QGYvz_MVcBeNP4NJuktqWow.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://fonts.gstatic.com/s/outfit/v6/QGYvz_MVcBeNP4NJuktqWow.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v13/tDba2o-flEEny0FZhsfKu5WU4xD-IQ-PuZJJXxfpAO-Lf1OQk6OThxPA.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v13/tDba2o-flEEny0FZhsfKu5WU4xD-IQ-PuZJJXxfpAO8LflOQk6OThxPA.woff2') format('woff2');
+  font-display: swap;
+}
+
+/* General Styling */
+body {
+  @apply bg-background text-text-primary font-inter;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-orbitron font-bold tracking-orbitron;
+}
+
+code, pre {
+  @apply font-mono;
+}
+
+a {
+  @apply text-accent hover:text-accent-hover transition-colors duration-300;
+}
+
+/* Focus styling for accessibility */
+*:focus-visible {
+  @apply outline-none ring-2 ring-accent ring-offset-2;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-surface;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-accent/60 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent;
+} 

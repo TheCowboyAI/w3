@@ -22,6 +22,8 @@
 
         nativeBuildInputs = with pkgs; [
           rustToolchain
+          cargo-generate
+          leptosfmt
           trunk
           wasm-bindgen-cli
           wasm-pack
